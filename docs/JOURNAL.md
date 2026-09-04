@@ -4,6 +4,48 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-04 — README narrative and visual system
+
+### Shipped
+
+- Replaced the minimal root README with the public PeaRL narrative: the
+  prototype-to-production problem, v1 environment loop, current quickstart,
+  Objective + ACTRW provenance, E01 target experiment, Enterprise-25,
+  Gnomon, bounded PolicyConfig improvement, interoperability boundaries,
+  current status, and explicit non-goals.
+- Added three accessible SVG assets for the hero, core loop, and Enterprise-25
+  matrix using one restrained visual system.
+- Kept every implementation claim phase-correct. The README labels E01 as a
+  target and distinguishes current Gnomon capabilities from planned v1 work.
+
+### Verification
+
+- 93/93 tests passed on Python 3.12.
+- Ruff passed.
+- Strict mypy passed across 11 source files.
+- All three SVGs parsed as XML, rendered to PNG, and were visually inspected at
+  1.5x output resolution.
+- Pandoc rendered the README from GitHub-flavored Markdown.
+- All 27 local and external README references were scanned; every local target
+  exists.
+- Markdownlint passed with only the intentional centered HTML and long-line
+  rules disabled.
+
+### Deviations and concerns
+
+- No product behavior, scope, or active Day 3 implementation changed.
+- The README uses small HTML blocks for centered responsive assets and badges;
+  the rest remains ordinary GitHub-flavored Markdown.
+- No empirical E01 result is shown before the experiment exists.
+
+### Next
+
+Day 3 only: Seed Scenario schema, Scenario Mutator protocol, deterministic
+sampling and provenance, partition labels, four generic perturbations, and the
+first E01 Seed Scenarios.
+
+---
+
 ## 2026-09-03 — Day 2: Canonical ontology and EnvironmentSpec
 
 ### Shipped

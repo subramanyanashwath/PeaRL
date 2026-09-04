@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="450" viewBox="0 0 1200 450" role="img" aria-labelledby="title desc">
+  <title id="title">The PeaRL environment and improvement loop</title>
+  <desc id="desc">A loop from Environment to Scenarios, Policy, Trajectories, Evaluation, Gnomon, Failures, Hill-Climb, and Replay, with replay returning to scenarios.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8f9fc"/>
+      <stop offset="1" stop-color="#f8fafc"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#94a3b8"/>
+    </marker>
+    <marker id="loop-arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4.5 L0,9 Z" fill="#4f46e5"/>
+    </marker>
+    <filter id="soft-shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="7" stdDeviation="10" flood-color="#4f46e5" flood-opacity=".08"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="450" rx="24" fill="url(#background)" stroke="#e2e8f0"/>
+  <text x="48" y="48" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="13" font-weight="700" letter-spacing="1.8">THE PeaRL LOOP</text>
+  <text x="48" y="83" fill="#0f172a" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700">From operating conditions to evidence-backed change</text>
+
+  <g fill="none" stroke="#94a3b8" stroke-width="2.2" marker-end="url(#arrow)">
+    <path d="M238 171 H278"/>
+    <path d="M458 171 H498"/>
+    <path d="M678 171 H718"/>
+    <path d="M898 171 H938"/>
+    <path d="M1028 214 V270"/>
+    <path d="M938 319 H898"/>
+    <path d="M718 319 H678"/>
+    <path d="M498 319 H458"/>
+  </g>
+
+  <path d="M278 319 H178 Q118 319 118 259 V231 Q118 171 178 171 H278"
+        fill="none" stroke="#4f46e5" stroke-width="2.4" stroke-dasharray="7 7"
+        marker-end="url(#loop-arrow)"/>
+  <text x="57" y="248" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="12" font-weight="700" transform="rotate(-90 57 248)">PAIRED REPLAY</text>
+
+  <g filter="url(#soft-shadow)" font-family="Inter, 'Segoe UI', Arial, sans-serif">
+    <g transform="translate(58 125)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#c7d2fe"/>
+      <circle cx="24" cy="24" r="7" fill="#4f46e5"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Environment</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">state · actions · tools</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">constraints · truth</text>
+    </g>
+
+    <g transform="translate(278 125)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#bae6fd"/>
+      <circle cx="24" cy="24" r="7" fill="#0ea5e9"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Scenarios</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">conditions · mutations</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">seeds · partitions</text>
+    </g>
+
+    <g transform="translate(498 125)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#ddd6fe"/>
+      <circle cx="24" cy="24" r="7" fill="#7c3aed"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Policy</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">model · prompt · tools</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">retrieval · orchestration</text>
+    </g>
+
+    <g transform="translate(718 125)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#fbcfe8"/>
+      <circle cx="24" cy="24" r="7" fill="#ec4899"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Trajectories</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">observations · actions</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">tool calls · state changes</text>
+    </g>
+
+    <g transform="translate(938 125)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#fde68a"/>
+      <circle cx="24" cy="24" r="7" fill="#f59e0b"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Evaluation</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">vector · evidence</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">Hard Gates</text>
+    </g>
+
+    <g transform="translate(938 273)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#bbf7d0"/>
+      <circle cx="24" cy="24" r="7" fill="#16a34a"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Gnomon</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">uncertainty · power</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">paired tests · Verdict</text>
+    </g>
+
+    <g transform="translate(718 273)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#fbcfe8"/>
+      <circle cx="24" cy="24" r="7" fill="#ec4899"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Failures</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">taxonomy · distribution</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">conditional slices</text>
+    </g>
+
+    <g transform="translate(498 273)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#ddd6fe"/>
+      <circle cx="24" cy="24" r="7" fill="#7c3aed"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Hill-Climb</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">bounded config edits</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">search · validation</text>
+    </g>
+
+    <g transform="translate(278 273)">
+      <rect width="180" height="92" rx="15" fill="#ffffff" stroke="#c7d2fe"/>
+      <circle cx="24" cy="24" r="7" fill="#4f46e5"/>
+      <text x="42" y="29" fill="#0f172a" font-size="17" font-weight="700">Replay</text>
+      <text x="20" y="59" fill="#64748b" font-size="12.5">same scenario IDs</text>
+      <text x="20" y="77" fill="#64748b" font-size="12.5">held-out confirmation</text>
+    </g>
+  </g>
+
+  <text x="600" y="416" text-anchor="middle" fill="#64748b" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="14">
+    The loop improves PolicyConfig; it does not update model weights.
+  </text>
+</svg>
