@@ -50,9 +50,10 @@ Legacy Gnomon concepts are preserved for later adapters:
 
 PeaRL core must not depend on these legacy types.
 
-## Day 1 package surface
+## Current package surface
 
-Only these modules are introduced now:
+Days 1–2 introduce only the statistical kernel, CLI, declarative specification,
+and Registry surfaces:
 
 ```text
 src/pearl/
@@ -64,7 +65,16 @@ src/pearl/
         __init__.py
         bootstrap.py
         power.py
+    spec/
+        __init__.py
+        environment.py
+        loader.py
+        registry.py
+        scenario.py
+environments/
+    enterprise25/
+        registry.yaml
 ```
 
-All environment, scenario, runtime, evaluator, failure, optimization, and
-reporting packages begin in their designated milestones.
+Scenario distribution, runtime, Policy, trajectory, evaluator, failure,
+optimization, and reporting packages begin in their designated milestones.

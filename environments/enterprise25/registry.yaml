@@ -1,0 +1,202 @@
+pearl_registry_version: "1.0"
+
+environments:
+  - id: enterprise25.E01
+    name: Claims Dispute Resolution
+    vertical: fsi_insurance
+    workflow_archetype: support_resolution
+    objective: Resolve a disputed insurance claim with policy-grounded evidence and appropriate human escalation.
+    primary_capability_stresses: [conflicting_truth, evidence_completeness, tool_routing, escalation]
+    expected_failure_families: [grounding, tool, human_coordination, constraint]
+
+  - id: enterprise25.E02
+    name: Prior Authorization Appeal
+    vertical: healthcare
+    workflow_archetype: support_resolution
+    objective: Prepare an evidence-grounded prior authorization appeal while preserving clinical and approval boundaries.
+    primary_capability_stresses: [clinical_context, missing_evidence, policy_grounding, escalation]
+    expected_failure_families: [grounding, human_coordination, constraint, evaluation]
+
+  - id: enterprise25.E03
+    name: Store Escalation Resolution
+    vertical: retail
+    workflow_archetype: support_resolution
+    objective: Resolve a store escalation consistently with customer, inventory, and commercial-policy context.
+    primary_capability_stresses: [customer_context, inventory_state, policy_exceptions, handoffs]
+    expected_failure_families: [state, tool, human_coordination, constraint]
+
+  - id: enterprise25.E04
+    name: Supplier Quality Dispute
+    vertical: manufacturing
+    workflow_archetype: support_resolution
+    objective: Resolve a supplier quality dispute from inspection evidence, contract constraints, and approval rules.
+    primary_capability_stresses: [conflicting_evidence, specification_grounding, supplier_handoff, approvals]
+    expected_failure_families: [grounding, planning, human_coordination, constraint]
+
+  - id: enterprise25.E05
+    name: Delivery Exception Resolution
+    vertical: transportation_logistics
+    workflow_archetype: support_resolution
+    objective: Resolve a delivery exception using current shipment state, service commitments, and escalation rules.
+    primary_capability_stresses: [dynamic_state, tool_routing, customer_commitments, escalation]
+    expected_failure_families: [state, tool, human_coordination, planning]
+
+  - id: enterprise25.E06
+    name: Credit Deterioration Investigation
+    vertical: fsi_insurance
+    workflow_archetype: research_investigation
+    objective: Investigate signs of credit deterioration and produce a traceable evidence-based assessment.
+    primary_capability_stresses: [multi_source_evidence, temporal_reasoning, causal_hypotheses, uncertainty]
+    expected_failure_families: [grounding, planning, state, evaluation]
+
+  - id: enterprise25.E07
+    name: Utilization Anomaly Investigation
+    vertical: healthcare
+    workflow_archetype: research_investigation
+    objective: Investigate a healthcare utilization anomaly without mistaking correlation for supported explanation.
+    primary_capability_stresses: [multi_source_evidence, anomaly_interpretation, investigation_sequence, incomplete_context]
+    expected_failure_families: [grounding, planning, tool, evaluation]
+
+  - id: enterprise25.E08
+    name: Merchandising Performance Investigation
+    vertical: retail
+    workflow_archetype: research_investigation
+    objective: Explain a merchandising performance change using relevant commercial and operational evidence.
+    primary_capability_stresses: [metric_decomposition, temporal_context, confounders, evidence_selection]
+    expected_failure_families: [grounding, planning, tool, evaluation]
+
+  - id: enterprise25.E09
+    name: Quality Root-Cause Investigation
+    vertical: manufacturing
+    workflow_archetype: research_investigation
+    objective: Identify supported root-cause candidates for a manufacturing quality deviation.
+    primary_capability_stresses: [causal_sequence, process_evidence, competing_hypotheses, missing_data]
+    expected_failure_families: [grounding, planning, state, evaluation]
+
+  - id: enterprise25.E10
+    name: Network Delay Root-Cause Investigation
+    vertical: transportation_logistics
+    workflow_archetype: research_investigation
+    objective: Determine supported causes of network delay across routes, facilities, and external constraints.
+    primary_capability_stresses: [network_context, temporal_sequence, tool_results, competing_causes]
+    expected_failure_families: [grounding, tool, planning, state]
+
+  - id: enterprise25.E11
+    name: KYC / AML Case Review
+    vertical: fsi_insurance
+    workflow_archetype: compliance_review
+    objective: Review a KYC or AML case against authoritative requirements and escalate unresolved risk.
+    primary_capability_stresses: [authoritative_truth, evidence_completeness, risk_thresholds, documentation]
+    expected_failure_families: [grounding, constraint, human_coordination, evaluation]
+
+  - id: enterprise25.E12
+    name: Medical-Necessity Compliance Review
+    vertical: healthcare
+    workflow_archetype: compliance_review
+    objective: Review medical necessity against applicable clinical policy without exceeding decision authority.
+    primary_capability_stresses: [clinical_policy, evidence_completeness, authority_boundary, documentation]
+    expected_failure_families: [grounding, constraint, human_coordination, evaluation]
+
+  - id: enterprise25.E13
+    name: Pricing & Promotion Compliance Audit
+    vertical: retail
+    workflow_archetype: compliance_review
+    objective: Audit pricing and promotions against temporal commercial rules and documented exceptions.
+    primary_capability_stresses: [temporal_rules, conflicting_rules, exception_handling, hard_gates]
+    expected_failure_families: [constraint, grounding, state, evaluation]
+
+  - id: enterprise25.E14
+    name: Supplier Regulatory Documentation Review
+    vertical: manufacturing
+    workflow_archetype: compliance_review
+    objective: Verify supplier documentation against regulatory requirements and identify blocking gaps.
+    primary_capability_stresses: [document_grounding, version_control, missing_evidence, approval_boundary]
+    expected_failure_families: [grounding, constraint, human_coordination, evaluation]
+
+  - id: enterprise25.E15
+    name: Customs & Shipping Documentation Review
+    vertical: transportation_logistics
+    workflow_archetype: compliance_review
+    objective: Review customs and shipping documents for route-specific completeness and compliance.
+    primary_capability_stresses: [jurisdiction_rules, document_consistency, temporal_validity, hard_gates]
+    expected_failure_families: [grounding, constraint, state, evaluation]
+
+  - id: enterprise25.E16
+    name: Account Servicing Exception
+    vertical: fsi_insurance
+    workflow_archetype: operations_exceptions
+    objective: Resolve an account servicing exception within authority, policy, and customer-state constraints.
+    primary_capability_stresses: [account_state, authorization, tool_sequence, escalation]
+    expected_failure_families: [state, tool, constraint, human_coordination]
+
+  - id: enterprise25.E17
+    name: Claims Adjudication Exception
+    vertical: healthcare
+    workflow_archetype: operations_exceptions
+    objective: Resolve a healthcare claim adjudication exception using valid evidence and controlled handoffs.
+    primary_capability_stresses: [claim_state, coding_evidence, exception_rules, handoffs]
+    expected_failure_families: [state, grounding, constraint, human_coordination]
+
+  - id: enterprise25.E18
+    name: Inventory Replenishment Exception
+    vertical: retail
+    workflow_archetype: operations_exceptions
+    objective: Recover from an inventory replenishment exception while respecting availability and ordering constraints.
+    primary_capability_stresses: [inventory_state, tool_outages, dependency_sequence, replanning]
+    expected_failure_families: [state, tool, planning, constraint]
+
+  - id: enterprise25.E19
+    name: Production Disruption Recovery
+    vertical: manufacturing
+    workflow_archetype: operations_exceptions
+    objective: Recover safely from a production disruption across dynamic dependencies and human handoffs.
+    primary_capability_stresses: [dynamic_state, sequencing, system_outages, recovery_actions]
+    expected_failure_families: [state, planning, tool, human_coordination]
+
+  - id: enterprise25.E20
+    name: Shipment Routing Exception
+    vertical: transportation_logistics
+    workflow_archetype: operations_exceptions
+    objective: Resolve a shipment routing exception under current capacity, service, and operational constraints.
+    primary_capability_stresses: [route_state, capacity_constraints, tool_availability, replanning]
+    expected_failure_families: [state, tool, planning, constraint]
+
+  - id: enterprise25.E21
+    name: Credit Workout Planning
+    vertical: fsi_insurance
+    workflow_archetype: planning_decision
+    objective: Develop a credit workout plan that balances recovery, risk, constraints, and human approval.
+    primary_capability_stresses: [tradeoffs, scenario_planning, risk_constraints, approval]
+    expected_failure_families: [planning, grounding, constraint, human_coordination]
+
+  - id: enterprise25.E22
+    name: Care Coordination Planning
+    vertical: healthcare
+    workflow_archetype: planning_decision
+    objective: Build a care coordination plan from patient context, resource constraints, and ownership boundaries.
+    primary_capability_stresses: [multi_actor_context, resource_constraints, sequencing, handoffs]
+    expected_failure_families: [planning, state, human_coordination, constraint]
+
+  - id: enterprise25.E23
+    name: Assortment & Inventory Planning
+    vertical: retail
+    workflow_archetype: planning_decision
+    objective: Plan assortment and inventory across demand uncertainty, commercial goals, and supply constraints.
+    primary_capability_stresses: [forecast_uncertainty, resource_allocation, tradeoffs, delayed_effects]
+    expected_failure_families: [planning, grounding, state, evaluation]
+
+  - id: enterprise25.E24
+    name: Production Capacity Planning
+    vertical: manufacturing
+    workflow_archetype: planning_decision
+    objective: Plan production capacity across demand, equipment, labor, and dependency constraints.
+    primary_capability_stresses: [resource_allocation, dependency_planning, changing_constraints, tradeoffs]
+    expected_failure_families: [planning, state, constraint, evaluation]
+
+  - id: enterprise25.E25
+    name: Network Capacity & Route Planning
+    vertical: transportation_logistics
+    workflow_archetype: planning_decision
+    objective: Plan network capacity and routes across changing constraints, resources, and delayed consequences.
+    primary_capability_stresses: [tradeoffs, multi_step_planning, changing_constraints, efficiency]
+    expected_failure_families: [planning, state, constraint, evaluation]

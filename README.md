@@ -11,15 +11,18 @@ PeaRL is local-first, provider-neutral, and does not train model weights.
 
 ## Status
 
-Day 1 scaffold. The migrated Gnomon statistical primitives are available from
-`pearl.gnomon`; environment and runtime features intentionally begin in later
-milestones.
+Day 2 complete. Canonical declarative environment and Scenario models,
+actionable YAML validation, and the complete Enterprise-25 Registry are
+available. Executable runtimes and Scenario mutation intentionally begin in
+later milestones.
 
 ## Development
 
 ```bash
 python -m pip install -e ".[dev]"
 pearl --help
+pearl registry list
+pearl validate path/to/environment.yaml
 pytest
 ruff check .
 mypy src
