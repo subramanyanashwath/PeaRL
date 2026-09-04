@@ -4,6 +4,20 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-03 — Day 1 published
+
+- Connected the local `main` branch to
+  `https://github.com/subramanyanashwath/PeaRL`.
+- Published the Day 1 root commit `76e0445`.
+- GitHub Actions run 1 passed on the Python 3.11/3.12 matrix.
+- Published Gnomon ADR-0004 in commit `6c9d07d`.
+- The repository-level `AGENTS.md` now requires this journal to be updated for
+  every substantive implementation session.
+
+No product behavior or milestone scope changed during publication.
+
+---
+
 ## 2026-09-03 — Day 1: Gnomon joins PeaRL
 
 Day 0 repository ingestion and Day 1 migration are complete.
