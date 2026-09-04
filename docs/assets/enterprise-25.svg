@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740" role="img" aria-labelledby="title desc">
+  <title id="title">PeaRL Enterprise-25 environment matrix</title>
+  <desc id="desc">A five-by-five matrix crossing workflow archetypes with enterprise verticals. E01, E07, E13, E19, and E25 are highlighted as the five v1 Gold targets.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8f9fc"/>
+      <stop offset="1" stop-color="#eef2ff"/>
+    </linearGradient>
+    <filter id="cell-shadow" x="-10%" y="-15%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#4f46e5" flood-opacity=".06"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="740" rx="24" fill="url(#background)" stroke="#e2e8f0"/>
+  <text x="40" y="45" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="13" font-weight="700" letter-spacing="1.8">ENTERPRISE-25</text>
+  <text x="40" y="80" fill="#0f172a" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="700">Five verticals × five shapes of work</text>
+  <text x="1160" y="76" text-anchor="end" fill="#64748b" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-size="14">25 Registry slots · 5 v1 Gold targets</text>
+
+  <g font-family="Inter, 'Segoe UI', Arial, sans-serif">
+    <rect x="40" y="112" width="220" height="64" rx="12" fill="#1e293b"/>
+    <text x="58" y="139" fill="#cbd5e1" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700" letter-spacing="1">WORKFLOW</text>
+    <text x="58" y="158" fill="#ffffff" font-size="14" font-weight="700">ARCHETYPE ↓</text>
+
+    <g text-anchor="middle" font-size="13" font-weight="700" fill="#334155">
+      <rect x="268" y="112" width="172" height="64" rx="12" fill="#e0e7ff"/>
+      <text x="354" y="140">FSI /</text><text x="354" y="158">Insurance</text>
+      <rect x="448" y="112" width="172" height="64" rx="12" fill="#e0f2fe"/>
+      <text x="534" y="149">Healthcare</text>
+      <rect x="628" y="112" width="172" height="64" rx="12" fill="#f3e8ff"/>
+      <text x="714" y="149">Retail</text>
+      <rect x="808" y="112" width="172" height="64" rx="12" fill="#fce7f3"/>
+      <text x="894" y="149">Manufacturing</text>
+      <rect x="988" y="112" width="172" height="64" rx="12" fill="#fef3c7"/>
+      <text x="1074" y="140">Transportation /</text><text x="1074" y="158">Logistics</text>
+    </g>
+
+    <g fill="#1e293b">
+      <rect x="40" y="184" width="220" height="88" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="58" y="218" font-size="14" font-weight="700">Support /</text><text x="58" y="239" font-size="14" font-weight="700">Resolution</text>
+
+      <rect x="40" y="280" width="220" height="88" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="58" y="314" font-size="14" font-weight="700">Research /</text><text x="58" y="335" font-size="14" font-weight="700">Investigation</text>
+
+      <rect x="40" y="376" width="220" height="88" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="58" y="410" font-size="14" font-weight="700">Compliance /</text><text x="58" y="431" font-size="14" font-weight="700">Review</text>
+
+      <rect x="40" y="472" width="220" height="88" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="58" y="506" font-size="14" font-weight="700">Operations /</text><text x="58" y="527" font-size="14" font-weight="700">Exceptions</text>
+
+      <rect x="40" y="568" width="220" height="88" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="58" y="602" font-size="14" font-weight="700">Planning /</text><text x="58" y="623" font-size="14" font-weight="700">Decision</text>
+    </g>
+
+    <g filter="url(#cell-shadow)">
+      <g transform="translate(268 184)">
+        <rect width="172" height="88" rx="12" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+        <text x="14" y="23" fill="#b45309" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E01 · GOLD TARGET</text>
+        <text x="14" y="49" fill="#0f172a" font-size="12.5" font-weight="700">Claims Dispute</text>
+        <text x="14" y="68" fill="#0f172a" font-size="12.5" font-weight="700">Resolution</text>
+      </g>
+      <g transform="translate(448 184)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E02</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Prior Authorization</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Appeal</text>
+      </g>
+      <g transform="translate(628 184)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E03</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Store Escalation</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Resolution</text>
+      </g>
+      <g transform="translate(808 184)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E04</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Supplier Quality</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Dispute</text>
+      </g>
+      <g transform="translate(988 184)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E05</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Delivery Exception</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Resolution</text>
+      </g>
+
+      <g transform="translate(268 280)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E06</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Credit Deterioration</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Investigation</text>
+      </g>
+      <g transform="translate(448 280)">
+        <rect width="172" height="88" rx="12" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+        <text x="14" y="23" fill="#b45309" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E07 · GOLD TARGET</text>
+        <text x="14" y="49" fill="#0f172a" font-size="12.5" font-weight="700">Utilization Anomaly</text>
+        <text x="14" y="68" fill="#0f172a" font-size="12.5" font-weight="700">Investigation</text>
+      </g>
+      <g transform="translate(628 280)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E08</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Merchandising</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Performance</text>
+      </g>
+      <g transform="translate(808 280)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E09</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Quality Root-Cause</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Investigation</text>
+      </g>
+      <g transform="translate(988 280)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E10</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Network Delay</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Root-Cause</text>
+      </g>
+
+      <g transform="translate(268 376)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E11</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">KYC / AML</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Case Review</text>
+      </g>
+      <g transform="translate(448 376)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E12</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Medical-Necessity</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Compliance</text>
+      </g>
+      <g transform="translate(628 376)">
+        <rect width="172" height="88" rx="12" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+        <text x="14" y="23" fill="#b45309" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E13 · GOLD TARGET</text>
+        <text x="14" y="49" fill="#0f172a" font-size="12.5" font-weight="700">Pricing &amp; Promotion</text>
+        <text x="14" y="68" fill="#0f172a" font-size="12.5" font-weight="700">Compliance Audit</text>
+      </g>
+      <g transform="translate(808 376)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E14</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Supplier Regulatory</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Documentation</text>
+      </g>
+      <g transform="translate(988 376)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E15</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Customs &amp; Shipping</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Documentation</text>
+      </g>
+
+      <g transform="translate(268 472)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E16</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Account Servicing</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Exception</text>
+      </g>
+      <g transform="translate(448 472)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E17</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Claims Adjudication</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Exception</text>
+      </g>
+      <g transform="translate(628 472)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E18</text>
+        <text x="14" y="45" fill="#334155" font-size="11.5" font-weight="700">Inventory</text>
+        <text x="14" y="62" fill="#334155" font-size="11.5" font-weight="700">Replenishment</text>
+        <text x="14" y="79" fill="#334155" font-size="11.5" font-weight="700">Exception</text>
+      </g>
+      <g transform="translate(808 472)">
+        <rect width="172" height="88" rx="12" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+        <text x="14" y="23" fill="#b45309" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E19 · GOLD TARGET</text>
+        <text x="14" y="49" fill="#0f172a" font-size="12.5" font-weight="700">Production Disruption</text>
+        <text x="14" y="68" fill="#0f172a" font-size="12.5" font-weight="700">Recovery</text>
+      </g>
+      <g transform="translate(988 472)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E20</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Shipment Routing</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Exception</text>
+      </g>
+
+      <g transform="translate(268 568)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E21</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Credit Workout</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Planning</text>
+      </g>
+      <g transform="translate(448 568)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E22</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Care Coordination</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Planning</text>
+      </g>
+      <g transform="translate(628 568)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E23</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Assortment &amp;</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Inventory Planning</text>
+      </g>
+      <g transform="translate(808 568)">
+        <rect width="172" height="88" rx="12" fill="#ffffff" stroke="#c7d2fe"/>
+        <text x="14" y="23" fill="#4f46e5" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E24</text>
+        <text x="14" y="49" fill="#334155" font-size="12.5" font-weight="700">Production Capacity</text>
+        <text x="14" y="68" fill="#334155" font-size="12.5" font-weight="700">Planning</text>
+      </g>
+      <g transform="translate(988 568)">
+        <rect width="172" height="88" rx="12" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+        <text x="14" y="23" fill="#b45309" font-family="SFMono-Regular, Consolas, monospace" font-size="11" font-weight="700">E25 · GOLD TARGET</text>
+        <text x="14" y="49" fill="#0f172a" font-size="12.5" font-weight="700">Network Capacity &amp;</text>
+        <text x="14" y="68" fill="#0f172a" font-size="12.5" font-weight="700">Route Planning</text>
+      </g>
+    </g>
+
+    <g transform="translate(40 690)" font-size="13">
+      <rect width="15" height="15" rx="4" fill="#ffffff" stroke="#c7d2fe"/>
+      <text x="24" y="13" fill="#64748b">Registry slot</text>
+      <rect x="132" width="15" height="15" rx="4" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+      <text x="156" y="13" fill="#64748b">v1 Gold target</text>
+      <text x="1120" y="13" text-anchor="end" fill="#64748b">Gold is a maturity bar, not a color applied early.</text>
+    </g>
+  </g>
+</svg>
