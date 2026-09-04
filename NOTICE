@@ -1,0 +1,7 @@
+PeaRL includes source code migrated from Gnomon:
+
+    https://github.com/subramanyanashwath/gnomon
+
+The migrated bootstrap and power modules and their tests were originally
+copyright (c) 2026 Ashwath and distributed under the MIT License. PeaRL is
+distributed under the same MIT License.
