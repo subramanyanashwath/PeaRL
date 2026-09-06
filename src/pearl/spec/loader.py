@@ -9,7 +9,7 @@ import yaml
 from pydantic import BaseModel, ValidationError
 
 from pearl.spec.environment import EnvironmentSpec
-from pearl.spec.scenario import Scenario
+from pearl.spec.scenario import Scenario, SeedScenario
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -24,6 +24,10 @@ def load_environment_spec(path: str | Path) -> EnvironmentSpec:
 
 def load_scenario(path: str | Path) -> Scenario:
     return _load_model(path, Scenario, "Scenario")
+
+
+def load_seed_scenario(path: str | Path) -> SeedScenario:
+    return _load_model(path, SeedScenario, "Seed Scenario")
 
 
 def load_environment_bundle(path: str | Path) -> tuple[EnvironmentSpec, tuple[Scenario, ...]]:

@@ -4,6 +4,59 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-05 — Day 3: Scenario distributions
+
+### Shipped
+
+- Added distinct strict models for human-authored `SeedScenario` records and
+  generated `Scenario` records.
+- Added explicit Search, Validation, and Confirmation labels with stable
+  60/20/20 hash assignment independent of sample size.
+- Added a runtime-checkable `ScenarioMutator` protocol and four generic bounded
+  perturbations: missing evidence, conflicting truth, tool outage, and changed
+  persona.
+- Made mutators non-destructive and provenance-bearing. Semantic mutations can
+  update Ground Truth alongside state, and every mutation records its type,
+  version, and concrete parameters.
+- Added configured deterministic sampling with complete replay inputs:
+  Environment version, Seed Scenario, distribution version, mutator sequence,
+  and random seed.
+- Added four initial hand-authored E01 Seed Scenarios and a data-driven E01
+  Scenario Distribution.
+- Added `pearl sample E01 --n 50 --seed 42`, emitting reproducible JSON Lines.
+
+### Verification
+
+- 110/110 tests passed on Python 3.12, including property-based seed
+  reproducibility, prefix stability, partition coverage, mutation immutability,
+  Ground Truth repair, provenance, E01 data loading, and the exact CLI exit gate.
+- Ruff passed.
+- Strict mypy passed across 16 source files.
+- Built and installed the wheel into an isolated target outside the repository.
+  The packaged `pearl sample E01 --n 50 --seed 42` emitted exactly 50 lines on
+  both runs with identical SHA-256 output hashes; the packaged Registry still
+  returned exactly 25 entries.
+
+### Deviations and concerns
+
+- No PRD deviation.
+- E01 has four initial Seed Scenarios, exceeding the Bronze minimum of three but
+  intentionally stopping short of the eight Seed Scenarios and six mutators
+  reserved for the Day 10 Gold milestone.
+- E01's full `EnvironmentSpec` does not exist yet, so the Day 3 seeds validate
+  against the Seed Scenario schema and Distribution ownership rules rather than
+  an E01 state schema. Day 10 must reconcile them with the executable E01 spec.
+- Partition labels are established now; their access-control semantics become
+  enforceable when the Hill-Climber is introduced on Day 9.
+- No architecture or correctness concern blocks Day 4.
+
+### Next
+
+Day 4 only: `EnvironmentRuntime`, `Policy`, `PolicyConfig`, deterministic
+execution, LLM wrapper, legacy Gnomon Agent adapter, and mock-Policy tests.
+
+---
+
 ## 2026-09-04 — README narrative and visual system
 
 ### Shipped

@@ -7,6 +7,7 @@ from pathlib import Path
 import typer
 
 from pearl import __version__
+from pearl.scenarios import load_scenario_distribution
 from pearl.spec import (
     SpecLoadError,
     default_registry_path,
@@ -54,6 +55,22 @@ def validate(path: Path) -> None:
         f"VALID: {environment.metadata.id} v{environment.metadata.version} "
         f"({len(scenarios)} scenarios)"
     )
+
+
+@app.command()
+def sample(
+    environment: str = typer.Argument(help="Environment ID, for example E01."),
+    n: int = typer.Option(50, "--n", min=1, help="Number of Scenarios to emit."),
+    seed: int = typer.Option(0, "--seed", min=0, help="Non-negative sampling seed."),
+) -> None:
+    """Emit deterministic generated Scenarios as JSON Lines."""
+    try:
+        scenarios = load_scenario_distribution(environment).sample(n, seed)
+    except (SpecLoadError, ValueError) as exc:
+        typer.echo(f"INVALID: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+    for scenario in scenarios:
+        typer.echo(scenario.model_dump_json())
 
 
 @registry_app.command("list")

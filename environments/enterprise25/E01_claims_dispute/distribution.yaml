@@ -1,0 +1,33 @@
+pearl_scenario_distribution_version: "1.0"
+environment_id: enterprise25.E01
+environment_version: 1
+version: "1.0"
+min_mutations: 1
+max_mutations: 2
+mutators:
+  - type: drop_state_field
+    fields: [evidence_summary]
+    condition: missing_evidence
+    ground_truth_updates:
+      expected_resolution: request_more_evidence
+  - type: set_state_value
+    field: policy_conflict
+    values: [true]
+    condition: conflicting_truth
+    ground_truth_updates:
+      expected_resolution: escalate
+  - type: set_tool_condition
+    tools: [policy_store, claims_api]
+    status: unavailable
+    condition: tool_outage
+    ground_truth_updates:
+      expected_resolution: escalate
+  - type: change_persona
+    personas:
+      - type: frustrated_claimant
+        communication_style: terse
+      - type: anxious_claimant
+        communication_style: detail_seeking
+      - type: represented_claimant
+        communication_style: formal
+    condition: changed_persona

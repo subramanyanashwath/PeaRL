@@ -25,6 +25,7 @@ from pearl.spec.loader import (
     load_environment_bundle,
     load_environment_spec,
     load_scenario,
+    load_seed_scenario,
 )
 from pearl.spec.registry import (
     Enterprise25Registry,
@@ -32,7 +33,15 @@ from pearl.spec.registry import (
     default_registry_path,
     load_registry,
 )
-from pearl.spec.scenario import Scenario, ScenarioProvenance, State
+from pearl.spec.scenario import (
+    MutationRecord,
+    Partition,
+    Scenario,
+    ScenarioProvenance,
+    SeedScenario,
+    SeedScenarioProvenance,
+    State,
+)
 
 __all__ = [
     "ACTRWProvenance",
@@ -47,13 +56,17 @@ __all__ = [
     "EvaluatorSpec",
     "GroundTruth",
     "HardGate",
+    "MutationRecord",
     "Objective",
     "Observation",
+    "Partition",
     "Provenance",
     "ProvenanceEntry",
     "RegistryEnvironment",
     "Scenario",
     "ScenarioProvenance",
+    "SeedScenario",
+    "SeedScenarioProvenance",
     "SpecLoadError",
     "State",
     "StateField",
@@ -64,4 +77,5 @@ __all__ = [
     "load_environment_spec",
     "load_registry",
     "load_scenario",
+    "load_seed_scenario",
 ]

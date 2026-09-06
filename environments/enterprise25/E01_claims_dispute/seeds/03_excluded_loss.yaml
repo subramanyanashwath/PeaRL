@@ -1,0 +1,21 @@
+id: E01.seed.03
+environment_id: enterprise25.E01
+initial_state:
+  claim_status: denied
+  documentation_complete: true
+  evidence_summary: Complete evidence establishes a loss expressly excluded by the policy.
+  policy_conflict: false
+  claim_amount: 3100
+persona:
+  type: frustrated_claimant
+  communication_style: direct
+conditions: [excluded_loss, complete_evidence]
+tool_conditions:
+  policy_store: healthy
+  claims_api: healthy
+ground_truth:
+  expected_resolution: uphold_denial
+  controlling_fact: explicit_policy_exclusion
+provenance:
+  author: pearl_team
+  notes: Clean denial reference case.

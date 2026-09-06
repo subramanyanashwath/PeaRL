@@ -29,10 +29,11 @@ It is local-first and provider-neutral. PeaRL improves the system around the
 model—prompts, tools, retrieval, context, orchestration, and escalation
 rules—without training model weights.
 
-> **Current build: specification + registry.** The declarative environment
-> model, YAML validation, Enterprise-25 Registry, and Gnomon statistical kernel
-> are available now. Executable runtimes and scenario generation are the next
-> milestones. See the [journal](docs/JOURNAL.md) for the unvarnished version.
+> **Current build: scenario distributions.** The declarative environment model,
+> YAML validation, Enterprise-25 Registry, Gnomon statistical kernel,
+> deterministic Scenario mutation, explicit evidence partitions, and first E01
+> seeds are available now. Executable runtime and Policy are the next milestone.
+> See the [journal](docs/JOURNAL.md) for the unvarnished version.
 
 ## 01 / The gap between a prototype and production
 
@@ -87,7 +88,11 @@ git clone https://github.com/subramanyanashwath/PeaRL.git
 cd PeaRL
 python -m pip install -e ".[dev]"
 pearl registry list
+pearl validate path/to/environment.yaml
+pearl sample E01 --n 50 --seed 42
 pytest -q
+ruff check .
+mypy src
 ```
 
 Validate any PeaRL environment specification:
@@ -97,9 +102,9 @@ pearl validate path/to/environment.yaml
 ```
 
 The current build includes strict Pydantic models, cross-reference validation,
-actionable YAML errors, the complete Enterprise-25 Registry, bootstrap
-confidence intervals, and design-aware power utilities. It runs on Python 3.11
-and 3.12.
+actionable YAML errors, the complete Enterprise-25 Registry, deterministic
+Scenario distributions, bootstrap confidence intervals, and design-aware power
+utilities. It runs on Python 3.11 and 3.12.
 
 ## 04 / Start with the work
 
@@ -271,8 +276,8 @@ Progress means shipped artifacts, not plans.
 
 | State | What it contains |
 | --- | --- |
-| **Available** | Gnomon bootstrap and power kernel; declarative environment and Scenario models; YAML validation; Enterprise-25 Registry; CLI; 93 passing tests |
-| **Building next** | Scenario distributions, deterministic mutation and provenance, partitions, E01 Seed Scenarios, executable runtime |
+| **Available** | Gnomon bootstrap and power kernel; declarative environment and Scenario models; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions with four generic mutators, provenance, partitions, and four E01 seeds; CLI; 110 passing tests |
+| **Building next** | Executable `EnvironmentRuntime`, Policy interfaces, deterministic execution, and the legacy Gnomon Agent adapter |
 | **v1 release target** | Multi-step trajectories, Evaluation Vectors, conditional Failure Distributions, Gnomon Verdicts, bounded hill-climbing, five Gold environments, twenty Bronze environments, and a reproducible E01 report |
 
 The detailed implementation sequence lives in the

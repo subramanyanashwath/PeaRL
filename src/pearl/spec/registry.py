@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sysconfig
 from pathlib import Path
 from typing import Literal
 
@@ -10,6 +9,7 @@ import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from pearl.spec.loader import SpecLoadError
+from pearl.spec.paths import canonical_data_path
 
 Vertical = Literal[
     "fsi_insurance",
@@ -77,11 +77,7 @@ class Enterprise25Registry(BaseModel):
 def default_registry_path() -> Path:
     """Return the canonical registry in a source checkout or installed wheel."""
     relative = Path("environments") / "enterprise25" / "registry.yaml"
-    source_path = Path(__file__).resolve().parents[3] / relative
-    if source_path.is_file():
-        return source_path
-    data_path = Path(sysconfig.get_path("data")) / "share" / "pearl" / relative
-    return data_path
+    return canonical_data_path(relative)
 
 
 def load_registry(path: str | Path | None = None) -> Enterprise25Registry:
