@@ -242,6 +242,13 @@ class EnvironmentSpec(FrozenModel):
                 f'Scenario {scenario.id} references environment "{scenario.environment_id}", '
                 f'but was loaded for environment "{environment_id}".'
             )
+        scenario_version = scenario.provenance.environment_version
+        if scenario_version is not None and scenario_version != self.metadata.version:
+            raise ValueError(
+                f"Scenario {scenario.id} was generated for environment version "
+                f"{scenario_version}, but {environment_id} is version "
+                f"{self.metadata.version}."
+            )
 
         unknown_state = set(scenario.initial_state.root) - set(self.state_schema)
         if unknown_state:
@@ -266,12 +273,7 @@ class EnvironmentSpec(FrozenModel):
             )
 
         for name, value in scenario.initial_state.root.items():
-            field_spec = self.state_schema[name]
-            if not _matches_state_type(value, field_spec.type):
-                raise ValueError(
-                    f'Scenario {scenario.id} gives initial-state field "{name}" value '
-                    f'{value!r}, which does not match declared type "{field_spec.type}".'
-                )
+            self.validate_state_value(name, value, owner=f"Scenario {scenario.id}")
 
         tool_ids = {tool.id for tool in self.tools}
         unknown_tools = set(scenario.tool_conditions) - tool_ids
@@ -280,6 +282,20 @@ class EnvironmentSpec(FrozenModel):
             raise ValueError(
                 f"Scenario {scenario.id} defines conditions for unknown tools in "
                 f"environment {environment_id}: {names}."
+            )
+
+    def validate_state_value(self, name: str, value: Any, *, owner: str) -> None:
+        """Validate one state value against this declarative schema."""
+        if name not in self.state_schema:
+            raise ValueError(
+                f'{owner} gives unknown state field "{name}" for '
+                f"environment {self.metadata.id}."
+            )
+        field_spec = self.state_schema[name]
+        if not _matches_state_type(value, field_spec.type):
+            raise ValueError(
+                f'{owner} gives state field "{name}" value {value!r}, which does '
+                f'not match declared type "{field_spec.type}".'
             )
 
 

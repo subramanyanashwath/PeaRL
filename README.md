@@ -29,11 +29,11 @@ It is local-first and provider-neutral. PeaRL improves the system around the
 model—prompts, tools, retrieval, context, orchestration, and escalation
 rules—without training model weights.
 
-> **Current build: scenario distributions.** The declarative environment model,
-> YAML validation, Enterprise-25 Registry, Gnomon statistical kernel,
-> deterministic Scenario mutation, explicit evidence partitions, and first E01
-> seeds are available now. Executable runtime and Policy are the next milestone.
-> See the [journal](docs/JOURNAL.md) for the unvarnished version.
+> **Current build: runtime + Policy.** Declarative environments, deterministic
+> Scenario distributions, the Enterprise-25 Registry, executable runtime and
+> Policy contracts, the legacy Gnomon Agent adapter, and a multi-step E01 state
+> machine are available now. Immutable Trajectories and Run artifacts are the
+> next milestone. See the [journal](docs/JOURNAL.md) for the unvarnished version.
 
 ## 01 / The gap between a prototype and production
 
@@ -256,8 +256,8 @@ The `Policy` boundary represents the complete agent system: model,
 instructions, tools, retrieval, context assembly, orchestration, and escalation
 logic. The v1 architecture is designed so an existing agent can sit behind a
 Policy adapter while PeaRL owns the environment, experiment, and evidence
-contracts. Those adapters arrive in later milestones; the public interfaces
-will remain provider-neutral.
+contracts. The legacy Gnomon Agent adapter is available; provider-specific
+adapters remain later work. The public interfaces remain provider-neutral.
 
 | Concept | Boundary |
 | --- | --- |
@@ -276,8 +276,8 @@ Progress means shipped artifacts, not plans.
 
 | State | What it contains |
 | --- | --- |
-| **Available** | Gnomon bootstrap and power kernel; declarative environment and Scenario models; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions with four generic mutators, provenance, partitions, and four E01 seeds; CLI; 110 passing tests |
-| **Building next** | Executable `EnvironmentRuntime`, Policy interfaces, deterministic execution, and the legacy Gnomon Agent adapter |
+| **Available** | Gnomon bootstrap and power kernel; declarative specifications; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions; `EnvironmentRuntime`; async `Policy`, `RulePolicy`, and `CallablePolicy`; legacy Gnomon Agent adapter; deterministic multi-step E01 execution; CLI; 133 passing tests |
+| **Building next** | Immutable Trajectories and Steps, `RunManifest`, JSONL artifacts, reusable Episode and batch runners |
 | **v1 release target** | Multi-step trajectories, Evaluation Vectors, conditional Failure Distributions, Gnomon Verdicts, bounded hill-climbing, five Gold environments, twenty Bronze environments, and a reproducible E01 report |
 
 The detailed implementation sequence lives in the

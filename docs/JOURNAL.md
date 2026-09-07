@@ -4,6 +4,69 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-07 — Day 4: Runtime and Policy boundaries
+
+### Shipped
+
+- Added the runtime `Action`, `Observation`, `RuntimeContext`,
+  `StateTransition`, and `StepResult` values separately from their declarative
+  specification records.
+- Added the runtime-checkable `EnvironmentRuntime` protocol and an injected
+  `FunctionalEnvironmentRuntime` that owns reset, observation, stepping, state
+  validation, action availability, maximum-step termination, and lifecycle
+  guards without embedding E01 logic in core.
+- Made reset and step updates atomic and defensive. Callback state and context
+  are copied, observations must faithfully match their declared state
+  projections, and invalid outputs do not partially advance runtime state.
+- Added environment-version checks when a generated Scenario enters a runtime.
+- Added the canonical async `Policy` protocol, deterministic `RulePolicy`, sync
+  or async `CallablePolicy`, and `LegacyGnomonAgentPolicy` for Gnomon's
+  `Agent.run(input: str) -> str` contract.
+- Kept Scenario Ground Truth out of `RuntimeContext` and `PolicyContext`.
+- Added a declarative E01 `EnvironmentSpec` and deterministic three-step Claims
+  Dispute runtime covering claim inspection, both tool-availability conditions,
+  policy retrieval, resolution, escalation, and declared termination.
+
+### Verification
+
+- 133/133 tests passed on Python 3.12. Day 4 tests cover lifecycle misuse,
+  defensive snapshots, environment-version ownership, state and observation
+  contract violations, unavailable actions, action arguments, both tool
+  outages, maximum-step termination, all Policy adapters, and deterministic
+  multi-step execution.
+- The exact Day 4 exit condition passes: one sampled E01 Scenario executes as a
+  complete three-step Episode. All 50 Scenarios from the Day 3 exit-gate sample
+  also execute to termination through the same runtime and Policy interfaces.
+- Ruff passed.
+- Strict mypy passed across 27 source files.
+- Built and installed the wheel into an isolated target outside the repository;
+  all 23 Day 4 Runtime, Policy, and E01 Episode tests passed against the
+  installed package and packaged E01 data.
+
+### Deviations and concerns
+
+- No PRD deviation.
+- The Day 4 Episode is intentionally driven by an integration-test loop. The
+  reusable Episode runner, immutable Trajectory, Step records, RunManifest, and
+  JSONL artifacts remain locked to Day 5.
+- `LegacyGnomonAgentPolicy` requires an explicit output parser because a legacy
+  text response cannot be safely interpreted as an environment Action without
+  environment-specific semantics.
+- E01 is a deterministic runtime fixture, not yet the polished Gold Environment
+  reserved for Day 10. Its evaluator plan is declarative only.
+- Generic JSON Schema execution for Action arguments was not added. E01 checks
+  its semantic action contract inside its transition function; a shared
+  validator should be considered only when multiple runtimes demonstrate the
+  need.
+- No architecture or correctness concern blocks Day 5.
+
+### Next
+
+Day 5 only: immutable `Trajectory` and `Step`, `RunManifest`, JSONL artifact
+store, reusable Episode runner, and batch runner.
+
+---
+
 ## 2026-09-05 — Day 3: Scenario distributions
 
 ### Shipped

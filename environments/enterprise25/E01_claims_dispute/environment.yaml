@@ -1,0 +1,182 @@
+pearl_spec_version: "1.0"
+metadata:
+  id: enterprise25.E01
+  name: Claims Dispute Resolution
+  version: 1
+  vertical: fsi_insurance
+  workflow_archetype: support_resolution
+  tags: [reference, deterministic]
+objective:
+  task: resolve_claim_dispute
+  business_goal: >
+    Produce an accurate, policy-grounded recommendation while escalating cases
+    that cannot be resolved safely.
+actors:
+  - id: claimant
+    name: Claimant
+    role: requests reconsideration
+  - id: claims_reviewer
+    name: Claims reviewer
+    role: owns the final disposition
+state_schema:
+  claim_status:
+    type: string
+    description: Current claim disposition.
+  documentation_complete:
+    type: boolean
+    description: Whether required claim documentation is present.
+  evidence_summary:
+    type: string
+    description: Policy-relevant evidence available to the reviewer.
+    required: false
+  policy_conflict:
+    type: boolean
+    description: Whether authoritative policy sources conflict.
+    default: false
+  claim_amount:
+    type: integer
+    description: Claimed amount in whole US dollars.
+  review_phase:
+    type: string
+    description: Current deterministic workflow phase.
+    default: intake
+  policy_retrieval_status:
+    type: string
+    description: Result of the policy retrieval attempt.
+    default: not_attempted
+  claims_retrieval_status:
+    type: string
+    description: Result of the live claim-record retrieval attempt.
+    default: not_attempted
+  policy_summary:
+    type: string
+    description: Retrieved controlling-policy summary.
+    required: false
+  resolution:
+    type: string
+    description: Final recommendation or escalation disposition.
+    required: false
+observations:
+  - id: claim_intake
+    description: Initial claim and evidence state.
+    state_fields:
+      - review_phase
+      - claim_status
+      - documentation_complete
+      - evidence_summary
+      - policy_conflict
+      - claim_amount
+  - id: policy_review
+    description: Claim state ready for policy retrieval.
+    state_fields:
+      - review_phase
+      - claim_status
+      - documentation_complete
+      - evidence_summary
+      - policy_conflict
+      - claim_amount
+      - claims_retrieval_status
+  - id: decision_context
+    description: Claim state and the result of policy retrieval.
+    state_fields:
+      - review_phase
+      - claim_status
+      - documentation_complete
+      - evidence_summary
+      - policy_conflict
+      - claim_amount
+      - claims_retrieval_status
+      - policy_retrieval_status
+      - policy_summary
+  - id: resolution
+    description: Terminal claim disposition.
+    state_fields: [review_phase, claim_status, resolution]
+actions:
+  - id: inspect_evidence
+    description: Inspect the submitted evidence for completeness and conflict.
+    tool_id: claims_api
+    observation_id: policy_review
+  - id: retrieve_policy
+    description: Retrieve the controlling policy record.
+    tool_id: policy_store
+    observation_id: decision_context
+  - id: resolve_claim
+    description: Return a supported claim recommendation.
+    observation_id: resolution
+    input_schema:
+      type: object
+      required: [resolution]
+      properties:
+        resolution:
+          type: string
+          enum: [approve, request_more_evidence, uphold_denial]
+      additionalProperties: false
+  - id: escalate_claim
+    description: Escalate when evidence, policy, or authority is insufficient.
+    observation_id: resolution
+tools:
+  - id: policy_store
+    description: Retrieve controlling insurance policy records.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: claims_api
+    description: Retrieve claim status and submitted documentation.
+    input_schema: {type: object}
+    output_schema: {type: object}
+constraints:
+  - id: evidence_before_decision
+    description: Evidence inspection and policy retrieval precede resolution.
+    action_ids: [inspect_evidence, retrieve_policy, resolve_claim, escalate_claim]
+  - id: human_escalation
+    description: Conflicting policy or unavailable authority requires escalation.
+    action_ids: [escalate_claim]
+ground_truth:
+  - id: approval
+    description: A supported covered claim may be approved.
+    state_values: {claim_status: resolved, resolution: approve}
+  - id: evidence_request
+    description: An incomplete record requires more evidence.
+    state_values: {claim_status: resolved, resolution: request_more_evidence}
+  - id: denial
+    description: An excluded loss supports the original denial.
+    state_values: {claim_status: resolved, resolution: uphold_denial}
+  - id: escalation
+    description: Unresolvable uncertainty requires human escalation.
+    state_values: {claim_status: escalated, resolution: escalate}
+termination:
+  max_steps: 6
+  success_conditions: [resolved, escalated]
+  failure_conditions: [max_steps]
+evaluation:
+  dimensions:
+    - id: task_success
+      description: Whether the disposition matches Scenario Ground Truth.
+      metric_type: binary
+    - id: constraint_compliance
+      description: Whether workflow and escalation constraints were respected.
+      metric_type: binary
+  evaluators: []
+  hard_gates:
+    - metric: constraint_compliance
+      operator: gte
+      value: 1.0
+provenance:
+  objective:
+    source: synthetic_reference
+    notes: Day 4 deterministic runtime fixture.
+  actrw:
+    agency:
+      source: synthetic_reference
+      notes: Policy recommends; a human retains final authority.
+    context:
+      source: synthetic_reference
+      notes: Claim state, evidence, policy conflict, and tool availability.
+    truth:
+      source: synthetic_reference
+      notes: Scenario Ground Truth defines the expected disposition.
+    risk:
+      source: synthetic_reference
+      notes: Incorrect disposition or missed escalation.
+    workflow:
+      source: synthetic_reference
+      notes: Inspect evidence, retrieve policy, decide or escalate.
