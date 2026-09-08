@@ -172,6 +172,8 @@ class FunctionalEnvironmentRuntime:
             state=self.state(),
             terminated=self.is_terminated,
             termination_reason=reason,
+            tool_call=deepcopy(transition.tool_call),
+            tool_result=deepcopy(transition.tool_result),
             info=deepcopy(transition.info),
         )
 

@@ -45,12 +45,12 @@ Legacy Gnomon concepts are preserved for later adapters:
 | Gnomon concept | PeaRL boundary | Milestone |
 |---|---|---:|
 | `Agent` | legacy Policy adapter | Day 4 (shipped) |
-| `EvalCase` | Scenario/single-turn compatibility | only if required by Day 5 |
-| `EvalRunner` | compatibility runner | Day 5 |
-| `EvalResult` | one-step Trajectory plus EvaluationResult | Day 5–6 |
+| `EvalCase` | Scenario/single-turn compatibility | only if compatibility demand requires it |
+| `EvalRunner` | compatibility runner | only if compatibility demand requires it |
+| `EvalResult` | one-step Trajectory plus EvaluationResult | only if compatibility demand requires it |
 | `Judge` / `LLMJudge` | Evaluator adapter | Day 6 |
 | `score_ci` | compatibility aggregation utility | Day 6–7 |
-| SQLite storage | optional run index/backend | Day 5 |
+| SQLite storage | optional run index/backend | only if backend demand requires it |
 
 PeaRL core must not depend on these legacy types.
 
@@ -76,9 +76,31 @@ logic trivial to use. `LegacyGnomonAgentPolicy` adapts Gnomon's structural
 Gnomon package; environment-specific output parsing remains explicit.
 
 Neither `RuntimeContext` nor `PolicyContext` contains Scenario Ground Truth.
-Ground Truth belongs to later evaluation, not action selection. Day 4 proves a
-multi-step Episode through integration tests only. The reusable Episode runner,
-immutable Trajectory, and Run artifacts remain Day 5 work.
+Ground Truth belongs to evaluation, not action selection. Runtime transitions
+surface tool calls and results as execution evidence without making the generic
+Episode runner inspect environment-specific state.
+
+## Trajectory and Run evidence boundary
+
+`Step`, `Trajectory`, `PolicyReference`, and `RunManifest` are strict,
+serializable evidence records. A Step snapshots the pre-action state,
+policy-visible observation, selected action, optional tool exchange, post-action
+state, and latency. Snapshot containers are recursively frozen, Step indexes are
+contiguous, and adjacent states must agree. Evaluation remains a separate record
+and cannot mutate a historical Trajectory.
+
+Episode IDs are derived from complete behavioral evidence. Run IDs cover the
+entire evidence bundle: Environment version, ordered full Scenario records,
+partition, sampling seed, Policy identity/configuration hash, and resulting
+Trajectories. Repeating the same deterministic Run is therefore idempotent;
+stochastic outcomes receive distinct identities, while changed content under an
+existing identity is rejected as a collision.
+
+The batch runner preserves Scenario order and creates a fresh runtime per
+Episode. The canonical artifact store writes `manifest.json`, `scenarios.jsonl`,
+and `trajectories.jsonl` to a staging directory and publishes the complete Run
+with one atomic rename. Evaluations begin on Day 6 and will be stored beside,
+not inside, these immutable execution records.
 
 ## Scenario generation boundary
 
@@ -99,8 +121,8 @@ may support the final Gnomon SHIP decision.
 
 ## Current package surface
 
-Days 1–4 introduce the statistical kernel, CLI, declarative specification,
-Registry, Scenario distributions, Runtime, and Policy surfaces:
+Days 1–5 introduce the statistical kernel, CLI, declarative specification,
+Registry, Scenario distributions, Runtime, Policy, and evidence surfaces:
 
 ```text
 src/pearl/
@@ -121,8 +143,11 @@ src/pearl/
         callable.py
         rule.py
     runtime/
+        artifacts.py
         environment.py
+        episode.py
         models.py
+        runner.py
     scenarios/
         __init__.py
         distribution.py
@@ -134,6 +159,7 @@ src/pearl/
         loader.py
         registry.py
         scenario.py
+        trajectory.py
 environments/
     enterprise25/
         registry.yaml
@@ -143,5 +169,5 @@ environments/
             seeds/
 ```
 
-Trajectory, Run, evaluator, failure, optimization, and reporting packages begin
-in their designated milestones.
+Evaluator, failure, optimization, and reporting packages begin in their
+designated milestones.

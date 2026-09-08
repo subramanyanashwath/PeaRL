@@ -29,11 +29,10 @@ It is local-first and provider-neutral. PeaRL improves the system around the
 model—prompts, tools, retrieval, context, orchestration, and escalation
 rules—without training model weights.
 
-> **Current build: runtime + Policy.** Declarative environments, deterministic
-> Scenario distributions, the Enterprise-25 Registry, executable runtime and
-> Policy contracts, the legacy Gnomon Agent adapter, and a multi-step E01 state
-> machine are available now. Immutable Trajectories and Run artifacts are the
-> next milestone. See the [journal](docs/JOURNAL.md) for the unvarnished version.
+> **Current build: reproducible Runs.** Declarative environments, deterministic
+> Scenario distributions, executable runtime and Policy contracts, immutable
+> Trajectories, and atomic JSONL Run bundles are available now. See the
+> [journal](docs/JOURNAL.md) for the unvarnished version.
 
 ## 01 / The gap between a prototype and production
 
@@ -90,6 +89,7 @@ python -m pip install -e ".[dev]"
 pearl registry list
 pearl validate path/to/environment.yaml
 pearl sample E01 --n 50 --seed 42
+pearl run E01 --policy baseline --partition search
 pytest -q
 ruff check .
 mypy src
@@ -101,10 +101,12 @@ Validate any PeaRL environment specification:
 pearl validate path/to/environment.yaml
 ```
 
-The current build includes strict Pydantic models, cross-reference validation,
-actionable YAML errors, the complete Enterprise-25 Registry, deterministic
-Scenario distributions, bootstrap confidence intervals, and design-aware power
-utilities. It runs on Python 3.11 and 3.12.
+The current build includes strict Pydantic models, the complete Enterprise-25
+Registry, deterministic Scenario distributions, executable E01 Episodes,
+content-addressed Run manifests, inspectable Scenario and Trajectory JSONL,
+bootstrap confidence intervals, and design-aware power utilities. It runs on
+Python 3.11 and 3.12. Run artifacts are written under `runs/<run_id>/` by
+default and are ignored by Git.
 
 ## 04 / Start with the work
 
@@ -276,8 +278,8 @@ Progress means shipped artifacts, not plans.
 
 | State | What it contains |
 | --- | --- |
-| **Available** | Gnomon bootstrap and power kernel; declarative specifications; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions; `EnvironmentRuntime`; async `Policy`, `RulePolicy`, and `CallablePolicy`; legacy Gnomon Agent adapter; deterministic multi-step E01 execution; CLI; 133 passing tests |
-| **Building next** | Immutable Trajectories and Steps, `RunManifest`, JSONL artifacts, reusable Episode and batch runners |
+| **Available** | Gnomon bootstrap and power kernel; declarative specifications; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions; `EnvironmentRuntime`; async Policy adapters; immutable Trajectories and Steps; `RunManifest`; atomic JSONL artifacts; reusable Episode and batch runners; deterministic E01 baseline; CLI; 147 passing tests |
+| **Building next** | Evaluation Vectors and deterministic evaluators, attached as records separate from immutable Trajectories |
 | **v1 release target** | Multi-step trajectories, Evaluation Vectors, conditional Failure Distributions, Gnomon Verdicts, bounded hill-climbing, five Gold environments, twenty Bronze environments, and a reproducible E01 report |
 
 The detailed implementation sequence lives in the

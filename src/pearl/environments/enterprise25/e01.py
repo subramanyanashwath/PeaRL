@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from copy import deepcopy
 
+from pearl.policies import PolicyContext, Rule, RulePolicy
 from pearl.runtime import (
     Action,
     FunctionalEnvironmentRuntime,
@@ -20,6 +22,45 @@ def create_e01_runtime() -> FunctionalEnvironmentRuntime:
     """Load E01's declaration and bind its deterministic state transitions."""
     spec = load_environment_spec(resolve_environment_path("E01") / "environment.yaml")
     return FunctionalEnvironmentRuntime(spec, _observe, _transition)
+
+
+def create_e01_baseline_policy() -> RulePolicy:
+    """Return the deterministic baseline required by the Day 5 Run gate."""
+    return RulePolicy(
+        name="baseline",
+        version="1.0",
+        rules=(
+            Rule(_in_phase("intake"), Action(id="inspect_evidence")),
+            Rule(_in_phase("policy_review"), Action(id="retrieve_policy")),
+            Rule(_in_phase("decision"), _baseline_decision),
+        ),
+    )
+
+
+def _in_phase(phase: str) -> Callable[[Observation, PolicyContext], bool]:
+    def predicate(observation: Observation, context: PolicyContext) -> bool:
+        return str(observation.data["review_phase"]) == phase
+
+    return predicate
+
+
+def _baseline_decision(observation: Observation, context: PolicyContext) -> Action:
+    if (
+        observation.data["claims_retrieval_status"] != "retrieved"
+        or observation.data["policy_retrieval_status"] != "retrieved"
+        or observation.data["policy_conflict"] is True
+    ):
+        return Action(id="escalate_claim")
+    if (
+        observation.data["documentation_complete"] is False
+        or "evidence_summary" not in observation.data
+    ):
+        resolution = "request_more_evidence"
+    elif "excluded" in str(observation.data["evidence_summary"]).lower():
+        resolution = "uphold_denial"
+    else:
+        resolution = "approve"
+    return Action(id="resolve_claim", arguments={"resolution": resolution})
 
 
 def _observe(state: State, context: RuntimeContext) -> Observation:
@@ -80,7 +121,11 @@ def _transition(
         else:
             next_state["claims_retrieval_status"] = "unavailable"
         next_state["review_phase"] = "policy_review"
-        return StateTransition(state=State(next_state))
+        return StateTransition(
+            state=State(next_state),
+            tool_call={"tool_id": "claims_api", "arguments": {}},
+            tool_result={"status": next_state["claims_retrieval_status"]},
+        )
 
     if phase == "policy_review" and action.id == "retrieve_policy":
         _require_arguments(action, set())
@@ -91,7 +136,11 @@ def _transition(
             next_state["policy_retrieval_status"] = "unavailable"
             next_state.pop("policy_summary", None)
         next_state["review_phase"] = "decision"
-        return StateTransition(state=State(next_state))
+        return StateTransition(
+            state=State(next_state),
+            tool_call={"tool_id": "policy_store", "arguments": {}},
+            tool_result={"status": next_state["policy_retrieval_status"]},
+        )
 
     if phase == "decision" and action.id == "resolve_claim":
         _require_arguments(action, {"resolution"})

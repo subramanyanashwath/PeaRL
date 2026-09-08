@@ -46,6 +46,8 @@ class StateTransition(_RuntimeValue):
 
     state: State
     termination_reason: str | None = None
+    tool_call: dict[str, Any] | None = None
+    tool_result: dict[str, Any] | None = None
     info: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -57,6 +59,8 @@ class StepResult(_RuntimeValue):
     state: State
     terminated: bool
     termination_reason: str | None = None
+    tool_call: dict[str, Any] | None = None
+    tool_result: dict[str, Any] | None = None
     info: dict[str, Any] = Field(default_factory=dict)
 
     @model_validator(mode="after")

@@ -2,13 +2,21 @@
 
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 
 import typer
 
 from pearl import __version__
+from pearl.environments.enterprise25 import (
+    create_e01_baseline_policy,
+    create_e01_runtime,
+)
+from pearl.runtime.artifacts import ArtifactStoreError, JsonlArtifactStore
+from pearl.runtime.runner import run_batch
 from pearl.scenarios import load_scenario_distribution
 from pearl.spec import (
+    Partition,
     SpecLoadError,
     default_registry_path,
     load_environment_bundle,
@@ -71,6 +79,49 @@ def sample(
         raise typer.Exit(code=1) from exc
     for scenario in scenarios:
         typer.echo(scenario.model_dump_json())
+
+
+@app.command("run")
+def run_command(
+    environment: str = typer.Argument(help="Environment ID, for example E01."),
+    policy: str = typer.Option(..., "--policy", help="Policy name."),
+    partition: Partition = typer.Option(
+        Partition.SEARCH, "--partition", help="Evidence partition to execute."
+    ),
+    n: int = typer.Option(50, "--n", min=1, help="Size of the generated Scenario pool."),
+    seed: int = typer.Option(42, "--seed", min=0, help="Scenario sampling seed."),
+    output: Path = typer.Option(
+        Path("runs"), "--output", help="Directory for immutable Run bundles."
+    ),
+) -> None:
+    """Execute a Policy over one reproducible Scenario partition."""
+    if environment.upper() != "E01":
+        typer.echo(f'INVALID: EnvironmentRuntime "{environment}" is not available.', err=True)
+        raise typer.Exit(code=1)
+    if policy != "baseline":
+        typer.echo(f'INVALID: Policy "{policy}" is not available for E01.', err=True)
+        raise typer.Exit(code=1)
+
+    try:
+        sampled = load_scenario_distribution(environment).sample(n, seed)
+        scenarios = tuple(item for item in sampled if item.partition == partition)
+        bundle = asyncio.run(
+            run_batch(
+                create_e01_runtime,
+                create_e01_baseline_policy(),
+                scenarios,
+                partition=partition,
+                sampling_seed=seed,
+            )
+        )
+        artifact_path = JsonlArtifactStore(output).write(bundle)
+    except (ArtifactStoreError, SpecLoadError, ValueError) as exc:
+        typer.echo(f"INVALID: {exc}", err=True)
+        raise typer.Exit(code=1) from exc
+
+    typer.echo(f"RUN: {bundle.manifest.run_id}")
+    typer.echo(f"EPISODES: {len(bundle.trajectories)} ({partition.value})")
+    typer.echo(f"ARTIFACTS: {artifact_path}")
 
 
 @registry_app.command("list")

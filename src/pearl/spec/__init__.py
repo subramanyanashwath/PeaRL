@@ -42,6 +42,7 @@ from pearl.spec.scenario import (
     SeedScenarioProvenance,
     State,
 )
+from pearl.spec.trajectory import PolicyReference, RunManifest, Step, Trajectory
 
 __all__ = [
     "ACTRWProvenance",
@@ -60,6 +61,7 @@ __all__ = [
     "Objective",
     "Observation",
     "Partition",
+    "PolicyReference",
     "Provenance",
     "ProvenanceEntry",
     "RegistryEnvironment",
@@ -69,9 +71,12 @@ __all__ = [
     "SeedScenarioProvenance",
     "SpecLoadError",
     "State",
+    "Step",
     "StateField",
     "TerminationSpec",
     "ToolSpec",
+    "Trajectory",
+    "RunManifest",
     "default_registry_path",
     "load_environment_bundle",
     "load_environment_spec",

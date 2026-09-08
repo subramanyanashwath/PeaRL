@@ -4,6 +4,65 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-08 — Day 5: Immutable trajectories and reproducible Runs
+
+### Shipped
+
+- Added strict `Step`, `Trajectory`, `PolicyReference`, and `RunManifest`
+  records. Execution snapshots are recursively immutable and finite-JSON-only;
+  traces enforce contiguous indexes and state continuity.
+- Added content-derived Trajectory and Run IDs. A Run identity covers the full
+  ordered Scenario records, Environment version, partition, sampling seed,
+  Policy version/configuration hash, and resulting Trajectories, so stochastic
+  reruns can remain distinct.
+- Added the reusable async `EpisodeRunner` and ordered `BatchRunner`, with a
+  fresh `EnvironmentRuntime` per Scenario and Ground Truth excluded from Policy
+  context.
+- Added canonical tool-call and tool-result evidence to runtime transitions and
+  E01's deterministic claims and policy retrieval steps.
+- Added an atomic file-first artifact store. Each Run contains
+  `manifest.json`, `scenarios.jsonl`, and `trajectories.jsonl`; exact reruns are
+  idempotent and conflicting content is never overwritten.
+- Promoted the Day 4 E01 rules into the versioned deterministic `baseline`
+  Policy and added the required `pearl run` command.
+
+### Verification
+
+- 147/147 tests passed on Python 3.12. Tests cover deep immutability, JSON
+  validity, trace continuity, deterministic identities, Policy timing,
+  partition isolation, batch ordering, bundle round-trips, idempotent writes,
+  collision refusal, and runtime/manifest cross-checks.
+- The exact exit gate passed: `pearl run E01 --policy baseline --partition
+  search` produced Run `run_e2d9b96cae039fe3` with 32 ordered Search Scenarios
+  and 32 complete Trajectories from the canonical 50-case seed-42 pool.
+- Ruff passed.
+- Strict mypy passed across 31 source files.
+- Built a non-editable wheel, installed it into the isolated Python 3.12
+  environment, and reproduced and reloaded the complete E01 Run from `/tmp`
+  using only packaged code and packaged Environment data.
+
+### Deviations and concerns
+
+- No PRD deviation.
+- The deterministic runner records zero latency by default so repeated local
+  execution stays byte-stable; callers can inject a monotonic nanosecond clock
+  when measured latency is part of the evidence.
+- Batch execution is intentionally ordered and sequential. Concurrency remains
+  outside the Day 5 contract and should be added only with explicit ordering,
+  rate-limit, and failure semantics.
+- Evaluation, failure, summary, and report artifacts are intentionally absent.
+  They begin in their named milestones rather than appearing as empty Day 5
+  files.
+- No architecture or correctness concern blocks Day 6.
+
+### Next
+
+Day 6 only: Evaluator protocol, deterministic Evaluators, task success,
+constraint compliance, and Evaluation Vectors stored separately from immutable
+Trajectories.
+
+---
+
 ## 2026-09-07 — Day 4: Runtime and Policy boundaries
 
 ### Shipped
