@@ -4,6 +4,66 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-11 — Day 6: Decomposed Evaluation Vectors
+
+### Shipped
+
+- Added immutable `EvaluatorReference`, `EvaluationResult`, `EvaluationVector`,
+  `EvaluationBundle`, and optional `Reward` records. Scores are finite and
+  normalized; evidence mappings are recursively immutable.
+- Added the canonical runtime-checkable `Evaluator` protocol, a generic
+  deterministic Evaluator wrapper, and Run/Episode evaluation orchestration
+  that rejects incorrectly attributed results.
+- Added all six standardized E01 dimensions: task success, grounding, tool use,
+  constraint compliance, escalation quality, and efficiency. The Environment
+  owns their deterministic semantics; core remains environment-neutral.
+- Added optional Reward aggregation requiring explicit complete weights that
+  sum to one. No default scalar is produced.
+- Added a structural legacy Gnomon Judge adapter with an explicit Scenario case
+  factory and no dependency from PeaRL core to the Gnomon package.
+- Added atomic, idempotent `evaluations.jsonl` sidecars. Evaluation never
+  rewrites Run manifests, Scenarios, or Trajectories, and conflicting evidence
+  is never overwritten.
+- Added `pearl evaluate <run_id>` and declared the complete E01 Evaluator suite
+  in its EnvironmentSpec.
+
+### Verification
+
+- 159/159 tests passed on Python 3.12. Day 6 tests cover all six dimensions,
+  result attribution, fixed suite ordering, deep immutability, explicit Reward
+  safeguards, the legacy Judge contract, atomic sidecar round-trips, collision
+  refusal, source-Trajectory preservation, and the CLI exit gate.
+- One complete Day 5 Run produced 32 ordered six-result Evaluation Vectors.
+  Grounding, tool use, constraint compliance, and efficiency passed 32/32;
+  task success and escalation quality passed 29/32.
+- Ruff passed.
+- Strict mypy passed across 39 source files.
+- Built and installed a non-editable wheel, then reproduced the complete
+  `run -> evaluate -> reload` path from `/tmp` using only packaged code and
+  data: 32 Trajectories, 32 Evaluation Vectors, and 192 decomposed results.
+
+### Deviations and concerns
+
+- No PRD deviation.
+- Three compound Search Scenarios combine missing evidence with unavailable
+  authority. Their last-written task label expects `request_more_evidence`,
+  while E01's non-compensatory safety constraint requires escalation. The
+  vector deliberately preserves both facts: task success and escalation
+  quality fail while grounding and constraint compliance pass.
+- That disagreement is not hidden with a Reward. Ground Truth precedence for
+  compound mutations must be made explicit before E01 reaches Gold or any
+  Confirmation evidence is interpreted; it does not block Day 7's statistical
+  integration over clearly named dimensions.
+- No LLM Evaluator was added. The PRD's deterministic-first hierarchy and
+  legacy Judge adapter satisfy Day 6 without introducing provider coupling.
+
+### Next
+
+Day 7 only: paired metric comparison, hard-gate regression, judge calibration,
+power-aware decisions, and Gnomon Verdicts.
+
+---
+
 ## 2026-09-08 — Day 5: Immutable trajectories and reproducible Runs
 
 ### Shipped

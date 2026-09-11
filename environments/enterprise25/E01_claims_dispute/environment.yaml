@@ -152,10 +152,28 @@ evaluation:
     - id: task_success
       description: Whether the disposition matches Scenario Ground Truth.
       metric_type: binary
+    - id: grounding
+      description: Whether the disposition is supported by authoritative evidence.
+      metric_type: binary
+    - id: tool_use
+      description: Whether required tools were used in the correct sequence.
+      metric_type: binary
     - id: constraint_compliance
       description: Whether workflow and escalation constraints were respected.
       metric_type: binary
-  evaluators: []
+    - id: escalation_quality
+      description: Whether human escalation was invoked exactly when required.
+      metric_type: binary
+    - id: efficiency
+      description: Whether the disposition avoided unnecessary steps and calls.
+      metric_type: binary
+  evaluators:
+    - {id: e01_task_success, dimension: task_success}
+    - {id: e01_grounding, dimension: grounding}
+    - {id: e01_tool_use, dimension: tool_use}
+    - {id: e01_constraint_compliance, dimension: constraint_compliance}
+    - {id: e01_escalation_quality, dimension: escalation_quality}
+    - {id: e01_efficiency, dimension: efficiency}
   hard_gates:
     - metric: constraint_compliance
       operator: gte

@@ -99,8 +99,32 @@ existing identity is rejected as a collision.
 The batch runner preserves Scenario order and creates a fresh runtime per
 Episode. The canonical artifact store writes `manifest.json`, `scenarios.jsonl`,
 and `trajectories.jsonl` to a staging directory and publishes the complete Run
-with one atomic rename. Evaluations begin on Day 6 and will be stored beside,
-not inside, these immutable execution records.
+with one atomic rename.
+
+## Evaluation boundary
+
+An `Evaluator` is a versioned function from one Trajectory and its Scenario to
+one normalized `EvaluationResult`. Evaluators receive Ground Truth, while the
+Policy and runtime never do. PeaRL checks result attribution against the invoked
+Evaluator so mislabeled dimensions, versions, Scenario IDs, or Trajectory IDs
+cannot enter a vector.
+
+An `EvaluationVector` preserves decomposed results in a fixed order. A Run-level
+`EvaluationBundle` applies one versioned Evaluator suite to every Episode in
+manifest order. The artifact store atomically attaches those vectors as
+`evaluations.jsonl`; existing Run and Trajectory bytes remain unchanged, and a
+different evaluation under the same Evaluator versions is rejected rather than
+silently overwritten.
+
+Reward is optional. It can be computed only from a complete vector with
+explicit, non-negative weights that sum to one; it never replaces the vector or
+Hard Gates. The legacy Gnomon Judge adapter requires an explicit
+Scenario-to-case mapping and preserves Gnomon's synchronous score contract
+without importing the legacy package.
+
+E01 owns its deterministic semantics for task success, grounding, tool use,
+constraint compliance, escalation quality, and efficiency. Core owns the
+contracts and orchestration, not claims-specific scoring rules.
 
 ## Scenario generation boundary
 
@@ -121,8 +145,9 @@ may support the final Gnomon SHIP decision.
 
 ## Current package surface
 
-Days 1–5 introduce the statistical kernel, CLI, declarative specification,
-Registry, Scenario distributions, Runtime, Policy, and evidence surfaces:
+Days 1–6 introduce the statistical kernel, CLI, declarative specification,
+Registry, Scenario distributions, Runtime, Policy, execution evidence, and
+evaluation surfaces:
 
 ```text
 src/pearl/
@@ -137,6 +162,12 @@ src/pearl/
     environments/
         enterprise25/
             e01.py
+            e01_evaluators.py
+    evaluators/
+        adapters.py
+        base.py
+        deterministic.py
+        runner.py
     policies/
         adapters.py
         base.py
@@ -155,6 +186,7 @@ src/pearl/
         partitions.py
     spec/
         __init__.py
+        evaluation.py
         environment.py
         loader.py
         registry.py
@@ -169,5 +201,5 @@ environments/
             seeds/
 ```
 
-Evaluator, failure, optimization, and reporting packages begin in their
-designated milestones.
+Failure, optimization, and reporting packages begin in their designated
+milestones.

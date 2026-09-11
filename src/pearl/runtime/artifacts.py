@@ -10,7 +10,11 @@ from pathlib import Path
 from pydantic import BaseModel, ValidationError
 
 from pearl.runtime.runner import RunBundle, run_id_for
-from pearl.spec import Scenario
+from pearl.spec import (
+    EvaluationBundle,
+    EvaluationVector,
+    Scenario,
+)
 from pearl.spec.trajectory import RunManifest, Trajectory
 
 
@@ -79,6 +83,71 @@ class JsonlArtifactStore:
             raise ArtifactStoreError("Run directory and manifest IDs do not match")
         return bundle
 
+    def write_evaluations(self, bundle: EvaluationBundle) -> Path:
+        """Atomically attach immutable evaluation evidence to an existing Run."""
+        run = self.read(bundle.run_id)
+        self._validate_evaluations(run, bundle)
+        content = self._jsonl(bundle.vectors)
+        target = self.root / bundle.run_id / "evaluations.jsonl"
+        if target.exists():
+            try:
+                existing = target.read_text(encoding="utf-8")
+            except (OSError, UnicodeError) as exc:
+                raise ArtifactStoreError(
+                    f'Could not read existing evaluations for "{bundle.run_id}": {exc}'
+                ) from exc
+            if existing != content:
+                raise ArtifactStoreError(
+                    f'Evaluation collision: Run "{bundle.run_id}" already has '
+                    "different evidence"
+                )
+            return target
+
+        descriptor, temporary_name = tempfile.mkstemp(
+            prefix=".evaluations.", suffix=".jsonl", dir=target.parent
+        )
+        os.close(descriptor)
+        temporary = Path(temporary_name)
+        try:
+            temporary.write_text(content, encoding="utf-8")
+            try:
+                os.link(temporary, target)
+            except FileExistsError:
+                existing = target.read_text(encoding="utf-8")
+                if existing != content:
+                    raise ArtifactStoreError(
+                        f'Evaluation collision: Run "{bundle.run_id}" already has '
+                        "different evidence"
+                    )
+        except OSError as exc:
+            raise ArtifactStoreError(
+                f'Could not attach evaluations to "{bundle.run_id}": {exc}'
+            ) from exc
+        finally:
+            temporary.unlink(missing_ok=True)
+        return target
+
+    def read_evaluations(self, run_id: str) -> EvaluationBundle:
+        """Load and cross-check the Evaluation Vectors attached to a Run."""
+        run = self.read(run_id)
+        try:
+            vectors = tuple(
+                EvaluationVector.model_validate_json(line)
+                for line in self._read_jsonl(self.root / run_id / "evaluations.jsonl")
+            )
+        except (OSError, UnicodeError, ValidationError, ValueError) as exc:
+            raise ArtifactStoreError(
+                f'Could not read evaluations for "{run_id}": {exc}'
+            ) from exc
+        evaluators = tuple(result.evaluator for result in vectors[0].results)
+        bundle = EvaluationBundle(
+            run_id=run_id,
+            evaluators=evaluators,
+            vectors=vectors,
+        )
+        self._validate_evaluations(run, bundle)
+        return bundle
+
     @staticmethod
     def _jsonl(records: tuple[BaseModel, ...]) -> str:
         return "".join(record.model_dump_json() + "\n" for record in records)
@@ -131,6 +200,27 @@ class JsonlArtifactStore:
                 raise ArtifactStoreError(
                     "Trajectory environment or Policy does not match manifest"
                 )
+
+    @staticmethod
+    def _validate_evaluations(run: RunBundle, bundle: EvaluationBundle) -> None:
+        if bundle.run_id != run.manifest.run_id:
+            raise ArtifactStoreError("Evaluation and Run IDs do not match")
+        expected_trajectory_ids = tuple(
+            trajectory.trajectory_id for trajectory in run.trajectories
+        )
+        expected_scenario_ids = tuple(scenario.id for scenario in run.scenarios)
+        actual_trajectory_ids = tuple(vector.trajectory_id for vector in bundle.vectors)
+        actual_scenario_ids = tuple(vector.scenario_id for vector in bundle.vectors)
+        if actual_trajectory_ids != expected_trajectory_ids:
+            raise ArtifactStoreError("Evaluation Vectors do not match Trajectory order")
+        if actual_scenario_ids != expected_scenario_ids:
+            raise ArtifactStoreError("Evaluation Vectors do not match Scenario order")
+        expected_evaluators = bundle.evaluators
+        if not expected_evaluators or any(
+            tuple(result.evaluator for result in vector.results) != expected_evaluators
+            for vector in bundle.vectors
+        ):
+            raise ArtifactStoreError("Evaluation Vectors do not use one fixed ordered suite")
 
     @staticmethod
     def _assert_existing_matches(target: Path, expected: dict[str, str]) -> None:

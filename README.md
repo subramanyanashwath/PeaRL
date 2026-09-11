@@ -29,10 +29,11 @@ It is local-first and provider-neutral. PeaRL improves the system around the
 model—prompts, tools, retrieval, context, orchestration, and escalation
 rules—without training model weights.
 
-> **Current build: reproducible Runs.** Declarative environments, deterministic
-> Scenario distributions, executable runtime and Policy contracts, immutable
-> Trajectories, and atomic JSONL Run bundles are available now. See the
-> [journal](docs/JOURNAL.md) for the unvarnished version.
+> **Current build: decomposed evaluation.** Declarative environments,
+> deterministic Scenario distributions, executable runtime and Policy
+> contracts, immutable Trajectories, atomic Run bundles, and six-dimension
+> Evaluation Vectors are available now. See the [journal](docs/JOURNAL.md) for
+> the unvarnished version.
 
 ## 01 / The gap between a prototype and production
 
@@ -90,6 +91,7 @@ pearl registry list
 pearl validate path/to/environment.yaml
 pearl sample E01 --n 50 --seed 42
 pearl run E01 --policy baseline --partition search
+pearl evaluate <run_id>
 pytest -q
 ruff check .
 mypy src
@@ -104,9 +106,9 @@ pearl validate path/to/environment.yaml
 The current build includes strict Pydantic models, the complete Enterprise-25
 Registry, deterministic Scenario distributions, executable E01 Episodes,
 content-addressed Run manifests, inspectable Scenario and Trajectory JSONL,
-bootstrap confidence intervals, and design-aware power utilities. It runs on
-Python 3.11 and 3.12. Run artifacts are written under `runs/<run_id>/` by
-default and are ignored by Git.
+decomposed deterministic Evaluation Vectors, bootstrap confidence intervals,
+and design-aware power utilities. It runs on Python 3.11 and 3.12. Run
+artifacts are written under `runs/<run_id>/` by default and are ignored by Git.
 
 ## 04 / Start with the work
 
@@ -278,8 +280,8 @@ Progress means shipped artifacts, not plans.
 
 | State | What it contains |
 | --- | --- |
-| **Available** | Gnomon bootstrap and power kernel; declarative specifications; YAML validation; Enterprise-25 Registry; deterministic Scenario distributions; `EnvironmentRuntime`; async Policy adapters; immutable Trajectories and Steps; `RunManifest`; atomic JSONL artifacts; reusable Episode and batch runners; deterministic E01 baseline; CLI; 147 passing tests |
-| **Building next** | Evaluation Vectors and deterministic evaluators, attached as records separate from immutable Trajectories |
+| **Available** | Gnomon bootstrap and power kernel; declarative specifications; Enterprise-25 Registry; deterministic Scenario distributions; Runtime and Policy adapters; immutable Trajectories; atomic Run artifacts; deterministic Evaluators; six-dimension Evaluation Vectors; optional explicit Reward; legacy Gnomon Judge adapter; E01 baseline; CLI; 159 passing tests |
+| **Building next** | Paired statistical comparison, hard-gate regression, judge calibration, and Gnomon Verdicts |
 | **v1 release target** | Multi-step trajectories, Evaluation Vectors, conditional Failure Distributions, Gnomon Verdicts, bounded hill-climbing, five Gold environments, twenty Bronze environments, and a reproducible E01 report |
 
 The detailed implementation sequence lives in the

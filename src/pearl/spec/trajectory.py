@@ -9,55 +9,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from pearl.spec._immutable import freeze_json
 from pearl.spec.scenario import Partition
-
-
-class FrozenDict(dict[str, Any]):
-    """A recursively frozen, JSON-compatible dictionary snapshot."""
-
-    def __deepcopy__(self, memo: dict[int, Any]) -> FrozenDict:
-        return self
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        raise TypeError("execution snapshots are immutable")
-
-    def __delitem__(self, key: str) -> None:
-        raise TypeError("execution snapshots are immutable")
-
-    def clear(self) -> None:
-        raise TypeError("execution snapshots are immutable")
-
-    def pop(self, *args: Any) -> Any:
-        raise TypeError("execution snapshots are immutable")
-
-    def popitem(self) -> tuple[str, Any]:
-        raise TypeError("execution snapshots are immutable")
-
-    def setdefault(self, key: str, default: Any = None) -> Any:
-        raise TypeError("execution snapshots are immutable")
-
-    def update(self, *args: Any, **kwargs: Any) -> None:
-        raise TypeError("execution snapshots are immutable")
-
-    def __ior__(self, value: Any) -> FrozenDict:  # type: ignore[misc, override]
-        raise TypeError("execution snapshots are immutable")
-
-
-def _freeze_json(value: Any) -> Any:
-    """Copy a value through strict JSON, then recursively remove mutable containers."""
-    try:
-        copied = json.loads(json.dumps(value, allow_nan=False))
-    except (TypeError, ValueError) as exc:
-        raise ValueError("execution evidence must contain only finite JSON values") from exc
-    return _freeze_loaded_json(copied)
-
-
-def _freeze_loaded_json(value: Any) -> Any:
-    if isinstance(value, dict):
-        return FrozenDict({key: _freeze_loaded_json(item) for key, item in value.items()})
-    if isinstance(value, list):
-        return tuple(_freeze_loaded_json(item) for item in value)
-    return value
 
 
 class _EvidenceRecord(BaseModel):
@@ -86,20 +39,20 @@ class Step(_EvidenceRecord):
 
     @model_validator(mode="after")
     def freeze_snapshots(self) -> Step:
-        object.__setattr__(self, "state_before", _freeze_json(self.state_before))
-        object.__setattr__(self, "observation", _freeze_json(self.observation))
-        object.__setattr__(self, "action", _freeze_json(self.action))
+        object.__setattr__(self, "state_before", freeze_json(self.state_before))
+        object.__setattr__(self, "observation", freeze_json(self.observation))
+        object.__setattr__(self, "action", freeze_json(self.action))
         object.__setattr__(
             self,
             "tool_call",
-            None if self.tool_call is None else _freeze_json(self.tool_call),
+            None if self.tool_call is None else freeze_json(self.tool_call),
         )
         object.__setattr__(
             self,
             "tool_result",
-            None if self.tool_result is None else _freeze_json(self.tool_result),
+            None if self.tool_result is None else freeze_json(self.tool_result),
         )
-        object.__setattr__(self, "state_after", _freeze_json(self.state_after))
+        object.__setattr__(self, "state_after", freeze_json(self.state_after))
         return self
 
 
@@ -122,7 +75,7 @@ class Trajectory(_EvidenceRecord):
                 raise ValueError("Trajectory Step indexes must be contiguous and zero-based")
             if expected_index and self.steps[expected_index - 1].state_after != step.state_before:
                 raise ValueError("Each Step must begin from the preceding Step's state_after")
-        object.__setattr__(self, "runtime_metadata", _freeze_json(self.runtime_metadata))
+        object.__setattr__(self, "runtime_metadata", freeze_json(self.runtime_metadata))
         expected_id = trajectory_id_for(
             environment_id=self.environment_id,
             environment_version=self.environment_version,
