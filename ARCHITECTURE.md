@@ -126,6 +126,35 @@ E01 owns its deterministic semantics for task success, grounding, tool use,
 constraint compliance, escalation quality, and efficiency. Core owns the
 contracts and orchestration, not claims-specific scoring rules.
 
+## Gnomon decision boundary
+
+Gnomon compares baseline and Candidate evidence only after verifying complete
+Run identities, identical Environment versions and partitions, byte-equivalent
+Scenario records in the same order, and identical Evaluator names and
+versions. Binary comparisons use pass/fail values; bounded-continuous
+comparisons use scores. Both estimate the Candidate-minus-baseline mean delta
+with a seeded paired bootstrap that resamples Scenario rows jointly.
+
+Hard Gates are deterministic point-estimate decisions evaluated independently
+of the primary metric. A failed gate returns `BLOCK` even when the primary
+metric improves. `SHIP` additionally requires a paired interval clearing the
+declared minimum effect on the Confirmation partition; Search or Validation
+evidence can produce `ITERATE`, never `SHIP`.
+
+Existing Gnomon power functions remain available only for their documented
+one-proportion and independent-two-proportion designs. Day 7 intentionally
+reports paired-replay power as unavailable rather than laundering an
+independent-arm calculation into a paired claim. A caller may attach a future,
+design-appropriate `PowerAssessment`; `UNDERPOWERED` is emitted only from
+explicit underpowered evidence.
+
+Judge Calibration is reference-grounded and separate from Run comparison. It
+reports Cohen's kappa, Krippendorff's alpha, Spearman correlation, bucketed
+agreement, and a paired bootstrap interval on mean absolute Judge error. Its
+effect-resolution answer is explicit: reliability metrics must clear the
+caller-stated floor and the upper error bound must remain below the
+caller-stated minimum effect.
+
 ## Scenario generation boundary
 
 Seed Scenarios are human-authored reference cases. A Scenario Distribution
@@ -145,7 +174,7 @@ may support the final Gnomon SHIP decision.
 
 ## Current package surface
 
-Days 1–6 introduce the statistical kernel, CLI, declarative specification,
+Days 1–7 introduce the statistical and decision layer, CLI, declarative specification,
 Registry, Scenario distributions, Runtime, Policy, execution evidence, and
 evaluation surfaces:
 
@@ -158,7 +187,10 @@ src/pearl/
     gnomon/
         __init__.py
         bootstrap.py
+        calibration.py
+        comparison.py
         power.py
+        verdict.py
     environments/
         enterprise25/
             e01.py

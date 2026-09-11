@@ -92,6 +92,7 @@ pearl validate path/to/environment.yaml
 pearl sample E01 --n 50 --seed 42
 pearl run E01 --policy baseline --partition search
 pearl evaluate <run_id>
+pearl compare <baseline_run_id> <candidate_run_id>
 pytest -q
 ruff check .
 mypy src
@@ -107,7 +108,8 @@ The current build includes strict Pydantic models, the complete Enterprise-25
 Registry, deterministic Scenario distributions, executable E01 Episodes,
 content-addressed Run manifests, inspectable Scenario and Trajectory JSONL,
 decomposed deterministic Evaluation Vectors, bootstrap confidence intervals,
-and design-aware power utilities. It runs on Python 3.11 and 3.12. Run
+metric-aware paired comparisons, Judge Calibration, non-compensatory Hard
+Gates, and structured Gnomon Verdicts. It runs on Python 3.11 and 3.12. Run
 artifacts are written under `runs/<run_id>/` by default and are ignored by Git.
 
 ## 04 / Start with the work
@@ -207,10 +209,12 @@ evaluator variance, or plain experimental leakage. **Gnomon is PeaRL's
 statistical inference layer.** It asks whether an apparent improvement is real
 enough to support a decision.
 
-Gnomon currently contributes bootstrap uncertainty and design-aware power
-utilities. PeaRL v1 extends it with paired comparisons, judge calibration,
-regression checks, and non-compensatory Hard Gates. It does not generate
-scenarios, execute environments, evaluate trajectories, or optimize policies.
+Gnomon contributes bootstrap uncertainty, design-aware power utilities,
+metric-aware paired comparisons, Judge Calibration, regression checks,
+non-compensatory Hard Gates, and structured Verdicts. It explicitly reports
+paired power as unavailable rather than applying its independent-arm power
+functions to replay data. It does not generate scenarios, execute
+environments, evaluate trajectories, or optimize policies.
 
 | Verdict | Meaning |
 | --- | --- |
@@ -280,8 +284,8 @@ Progress means shipped artifacts, not plans.
 
 | State | What it contains |
 | --- | --- |
-| **Available** | Gnomon bootstrap and power kernel; declarative specifications; Enterprise-25 Registry; deterministic Scenario distributions; Runtime and Policy adapters; immutable Trajectories; atomic Run artifacts; deterministic Evaluators; six-dimension Evaluation Vectors; optional explicit Reward; legacy Gnomon Judge adapter; E01 baseline; CLI; 159 passing tests |
-| **Building next** | Paired statistical comparison, hard-gate regression, judge calibration, and Gnomon Verdicts |
+| **Available** | Gnomon bootstrap and power kernel; paired comparisons; Judge Calibration; Hard Gates and Verdicts; declarative specifications; Enterprise-25 Registry; deterministic Scenario distributions; Runtime and Policy adapters; immutable Trajectories; atomic Run artifacts; deterministic Evaluators; six-dimension Evaluation Vectors; optional explicit Reward; legacy Gnomon Judge adapter; E01 baseline; CLI; 179 passing tests |
+| **Building next** | Conditional Failure Distributions with evidence-backed taxonomy |
 | **v1 release target** | Multi-step trajectories, Evaluation Vectors, conditional Failure Distributions, Gnomon Verdicts, bounded hill-climbing, five Gold environments, twenty Bronze environments, and a reproducible E01 report |
 
 The detailed implementation sequence lives in the

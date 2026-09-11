@@ -14,6 +14,7 @@ from pearl.environments.enterprise25 import (
     create_e01_runtime,
 )
 from pearl.evaluators import evaluate_run
+from pearl.gnomon import compare_evaluated_runs, invalid_verdict
 from pearl.runtime.artifacts import ArtifactStoreError, JsonlArtifactStore
 from pearl.runtime.runner import run_batch
 from pearl.scenarios import load_scenario_distribution
@@ -158,6 +159,58 @@ def evaluate(
             f"({passed}/{len(dimension_results)} passed)"
         )
     typer.echo(f"ARTIFACT: {evaluation_path}")
+
+
+@app.command()
+def compare(
+    baseline_run_id: str = typer.Argument(help="Baseline Run ID (P0)."),
+    candidate_run_id: str = typer.Argument(help="Candidate Run ID (P1)."),
+    artifacts: Path = typer.Option(
+        Path("runs"), "--artifacts", help="Directory containing evaluated Runs."
+    ),
+    primary_metric: str = typer.Option(
+        "task_success", "--primary-metric", help="Adoption metric."
+    ),
+    minimum_effect: float = typer.Option(
+        0.0,
+        "--minimum-effect",
+        min=0.0,
+        max=1.0,
+        help="Smallest paired improvement required for adoption.",
+    ),
+) -> None:
+    """Return a structured Gnomon verdict for two paired, evaluated Runs."""
+    store = JsonlArtifactStore(artifacts)
+    try:
+        baseline_run = store.read(baseline_run_id)
+        candidate_run = store.read(candidate_run_id)
+        baseline_evaluations = store.read_evaluations(baseline_run_id)
+        candidate_evaluations = store.read_evaluations(candidate_run_id)
+        if baseline_run.manifest.environment_id != "enterprise25.E01":
+            raise ValueError(
+                "No EnvironmentSpec loader is available for "
+                f'"{baseline_run.manifest.environment_id}".'
+            )
+        environment = create_e01_runtime().spec
+        verdict = compare_evaluated_runs(
+            baseline_run,
+            baseline_evaluations,
+            candidate_run,
+            candidate_evaluations,
+            environment,
+            primary_metric=primary_metric,
+            minimum_effect_size=minimum_effect,
+        )
+    except (ArtifactStoreError, ValueError) as exc:
+        verdict = invalid_verdict(
+            baseline_run_id,
+            candidate_run_id,
+            str(exc),
+            primary_metric=primary_metric,
+            minimum_effect_size=minimum_effect,
+        )
+
+    typer.echo(verdict.model_dump_json(indent=2))
 
 
 @registry_app.command("list")

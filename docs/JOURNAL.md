@@ -4,6 +4,65 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-09-11 — Day 7: Gnomon integrated decision layer
+
+### Shipped
+
+- Added binary pass/fail and bounded-continuous paired comparisons. Scenario
+  rows are jointly resampled with a seeded bootstrap; results retain baseline
+  and Candidate estimates, paired delta, interval, pair count, and method.
+- Added experiment validation across Run identity, Environment version,
+  partition, ordered full Scenario evidence, Trajectory attribution,
+  Evaluation Vector attribution, and Evaluator names and versions. Misaligned
+  evidence produces a structured `INVALID` Verdict.
+- Added deterministic `gte`, `lte`, and `max_regression` Hard Gate assessment.
+  Gates are non-compensatory and take precedence over primary-metric gains.
+- Added Cohen's kappa, Krippendorff's alpha, Spearman correlation, bucketed
+  agreement, and a Judge Calibration report. Calibration answers effect
+  resolution using a caller-stated reliability floor and the paired bootstrap
+  upper bound on mean absolute Judge error.
+- Added structured `SHIP`, `ITERATE`, `BLOCK`, `UNDERPOWERED`, and `INVALID`
+  Gnomon Verdicts. `SHIP` requires supported improvement on held-out
+  Confirmation evidence and every Hard Gate to pass.
+- Added an explicit paired-power `unavailable` assessment. Existing Gnomon
+  independent-proportion methods are preserved but never applied to paired
+  Replay.
+- Added `pearl compare <baseline_run_id> <candidate_run_id>`, which emits the
+  complete Verdict as JSON.
+
+### Verification
+
+- 179/179 tests passed on Python 3.12. New tests cover metric contracts,
+  paired resampling against SciPy, calibration against hand-calculated and
+  SciPy references, degenerate statistics, evidence misalignment, partition
+  isolation, Hard Gate precedence, all decision branches, and CLI structure.
+- The exact CLI exit gate ran against the current evaluated E01 artifact and
+  returned a structured six-dimension Verdict with 32 Scenario pairs, a
+  passing compliance gate, explicit unavailable paired power, and `ITERATE`
+  for the zero-delta same-Run smoke comparison.
+- Ruff passed.
+- Strict mypy passed across 42 source files.
+- Built and installed a non-editable wheel, then completed `run -> evaluate ->
+  compare` from `/tmp` using only packaged code and Environment data.
+
+### Deviations and concerns
+
+- No PRD deviation. The PRD explicitly permits paired power to be reported as
+  unavailable when no justified implementation exists for the design.
+- The same-Run CLI exercise verifies orchestration, pairing, and serialization;
+  it is not Candidate evidence. A genuine P0-to-P1 result begins with the
+  bounded PolicyConfig work scheduled for Days 9–10.
+- The Day 6 compound-Scenario Ground Truth precedence concern remains open for
+  E01 Gold and Confirmation interpretation. Day 7 does not rewrite historical
+  labels or conceal the disagreement in aggregate statistics.
+
+### Next
+
+Day 8 only: evidence-backed Failure records and conditional Failure
+Distributions.
+
+---
+
 ## 2026-09-11 — Day 6: Decomposed Evaluation Vectors
 
 ### Shipped

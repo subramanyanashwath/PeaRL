@@ -97,3 +97,34 @@ def test_evaluate_exit_gate_attaches_decomposed_vectors(tmp_path: Path) -> None:
     ).read_text().splitlines()
     assert len(evaluation_lines) == 32
     assert len(json.loads(evaluation_lines[0])["results"]) == 6
+
+
+def test_compare_exit_gate_returns_structured_gnomon_verdict(tmp_path: Path) -> None:
+    run_result = runner.invoke(
+        app,
+        ["run", "E01", "--policy", "baseline", "--output", str(tmp_path)],
+    )
+    assert run_result.exit_code == 0, run_result.output
+    run_id = next(
+        line.split(": ", 1)[1]
+        for line in run_result.output.splitlines()
+        if line.startswith("RUN:")
+    )
+    evaluation_result = runner.invoke(
+        app, ["evaluate", run_id, "--artifacts", str(tmp_path)]
+    )
+    assert evaluation_result.exit_code == 0, evaluation_result.output
+
+    result = runner.invoke(
+        app, ["compare", run_id, run_id, "--artifacts", str(tmp_path)]
+    )
+
+    assert result.exit_code == 0, result.output
+    verdict = json.loads(result.output)
+    assert verdict["verdict"] == "ITERATE"
+    assert verdict["baseline_run_id"] == verdict["candidate_run_id"] == run_id
+    assert verdict["primary_metric"] == "task_success"
+    assert verdict["power"]["status"] == "unavailable"
+    assert len(verdict["comparisons"]) == 6
+    assert verdict["comparisons"][0]["n_pairs"] == 32
+    assert verdict["hard_gates"][0]["passed"] is True
