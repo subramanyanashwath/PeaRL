@@ -4,6 +4,33 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — Episode design freeze
+
+### Shipped
+
+- Reconciled `enterprise25.E01` through `enterprise25.E25` with `environments/enterprise25/registry.yaml`. Names match. Five card files exist. Twenty do not.
+- Added `docs/episodes/freeze.yaml`, release `episode-design-2026-10-06`, status `frozen_design`. Card SHA-256 values are the raw bytes of `E16.md` through `E20.md` at `07f9754`. Absent cards have a null hash.
+- Marked E16–E20 `design_locked` and E01–E15 plus E21–E25 `deferred`. Each deferred entry states that its six templates were not written.
+- Appended the qualification handoff to `docs/episodes/README.md`.
+
+### Verification
+
+- Registry ids and names were compared with the card titles and with `freeze.yaml`. Locked cards have six template ids and empty open blocking-finding lists. No tests, lint, or type check were run. No episodes were executed. No confirmation instances were generated.
+
+### Deviations and concerns
+
+- The contract's 25-card, 150-row target is not met. Authoring stopped after E16–E20. This freeze does not invent the other cards.
+- E01 version 1 remains the only runnable environment. Its compound `expected_resolution` precedence stays unresolved, so the missing E01 card is deferred.
+- The four E19 SEARCH fixtures described for `codex/e19-verification-pilot` are not in this checkout. They are recorded as search-only and are not given ids or scores.
+- `mechanical_qualification` is `not_claimed`. `frozen_design` is not a SHIP conclusion.
+- R6, R7, and R8 remain open and nonblocking.
+
+### Next
+
+Qualification and analysis of the specified E19 read-back experiment, on the search partition, after a runtime exists. E10 and E25 follow that cohort only after they have designs. This campaign does not continue into another design family. Day 8 failure records remain the next PRD implementation milestone and were not started here.
+
+---
+
 ## 2026-10-06 — Episode design repair E16–E20
 
 ### Shipped
