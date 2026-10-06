@@ -1,0 +1,26 @@
+id: E19.case.04
+environment_id: enterprise25.E19
+initial_state:
+  disruption_id: DIS-19
+  location: LOC-19
+  demand_units: 10
+  on_hand: 12
+  reservations: []
+  revision: 3
+  approval_decision: granted
+  cache_available: 12
+  cache_note: ""
+  exogenous_qty: 0
+persona:
+  role: recovery_agent
+conditions: [lost_acknowledgement]
+tool_conditions:
+  reservation.commit: acknowledgement_lost
+ground_truth:
+  template_id: E19.template.tool_failure
+  outcome_class: supported_completion
+  expected_disposition: recovered
+  initial_on_hand: 12
+provenance:
+  author: pearl_team
+  notes: Fresh lost-acknowledgement case. The reservation lands under the first commit.

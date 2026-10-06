@@ -49,14 +49,14 @@ Display names in PRD §7.1 and the design seed match these names. Workflow displ
 | Surface | In this checkout |
 | --- | --- |
 | Registry slots | 25 |
-| `environment.yaml` + `EnvironmentSpec` | E01 only: `environments/enterprise25/E01_claims_dispute/environment.yaml`, metadata version 1 |
-| `EnvironmentRuntime` | E01 only: `create_e01_runtime()` in `src/pearl/environments/enterprise25/e01.py` |
-| Evaluators | E01 only: six deterministic evaluators in `e01_evaluators.py`, version `1.0` |
-| Policy | E01 `baseline` rule policy, version `1.0`. No second scripted policy |
-| Seed scenarios | `E01.seed.01` covered complete → `approve`; `E01.seed.02` missing repair invoice → `request_more_evidence`; `E01.seed.03` excluded loss → `uphold_denial`; `E01.seed.04` policy conflict → `escalate` |
-| Distribution | `distribution.yaml` version `1.0`, one to two mutations drawn from four mutators: `drop_state_field`, `set_state_value`, `set_tool_condition`, `change_persona` |
-| E02–E25 directories, specs, seeds, runtimes, evaluators, policies | Absent |
-| E19 fixtures or policies | Absent. The design seed's four SEARCH fixtures, two scripted policies, and seven-step reference path were described for branch `codex/e19-verification-pilot`. That branch is not checked out and those files are not on `main` |
+| `environment.yaml` + `EnvironmentSpec` | E01 version 1 and E19 version 1 |
+| `EnvironmentRuntime` | E01 `create_e01_runtime()` and E19 `create_e19_runtime()` |
+| Evaluators | E01 `e01_*` 1.0 and E19 `e19_*` 1.0. The E01 graders stay sequence-exact |
+| Policy | E01 `baseline` 1.0. E19 `e19_contract` 1.0 and `e19_blind` 1.0 |
+| Seed scenarios | E01 seeds `E01.seed.01` through `E01.seed.04`. E19 fresh cases `E19.case.01` through `E19.case.06` |
+| Distribution | E01 `distribution.yaml` version `1.0` only. E19 has no mutator distribution |
+| E02–E18 and E20–E25 directories | Absent |
+| E19 pilot fixtures | Still absent. The four SEARCH fixtures named for `codex/e19-verification-pilot` were not recreated. See `docs/episodes/E19_qualification.md` |
 
 E01 is a deterministic reference runtime. It is not Gold. PRD Gold for E01 requires at least 8 seeds, 6 mutator families, 150 generated scenarios, a candidate improvement, and a held-out confirmation. This tree has 4 seeds and 4 mutators.
 
@@ -325,3 +325,5 @@ The output contract above remains in force. The campaign stops at the files list
 **First E19 experiment.** `e19.readback-versus-commit-payload`, specified and not run. On `E19.template.base` and `E19.template.tool_failure`, completing `recovered` only after `reservation.read` of qty 10 passes `task_success`. Completing `recovered` from the commit payload fails it. Both anchors are `proposed_extension`, so the experiment waits on a runtime. The design seed's four E19 SEARCH fixtures are not in this checkout. This handoff does not invent their ids or scores. If they are recovered, they stay in `search`. No confirmation cohort, GPU budget, training result, or production benefit is claimed.
 
 The next work is qualification and analysis of that first E19 experiment. It is not another design expansion.
+
+E19 version 1 was qualified after this freeze. The results, including the blind-policy failure and the open Gold and confirmation checks, are in `docs/episodes/E19_qualification.md`. E10, E25, and the other archetypes were not implemented.

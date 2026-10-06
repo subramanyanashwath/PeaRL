@@ -4,6 +4,36 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — E19 version 1 qualification
+
+### Shipped
+
+- Added E19 environment version 1: spec, runtime, six evaluators, `e19_contract` 1.0, `e19_blind` 1.0, and fresh cases `E19.case.01` through `E19.case.06`.
+- Recorded the semantic differences and probe results in `docs/episodes/E19_qualification.md`.
+- Left `FunctionalEnvironmentRuntime`, the E01 evaluators, and Gnomon unchanged. A blocked E19 commit is a declared action that returns `rejected_authority`.
+
+### Verification
+
+- `ruff check` passed for the E19 modules and `tests/test_e19_qualification.py`.
+- `mypy --strict src/pearl` passed.
+- `pytest` passed, 192 tests.
+- Contract policy task success is 1.0 on all six cases. Blind policy task success is 0.0 on all six. Paired delta on task success is 1.0. That comparison is not a SHIP verdict.
+- The authority probe scores `constraint_compliance` 0 and writes no reservation.
+
+### Deviations and concerns
+
+- The four SEARCH pilot fixtures are still absent. They were not given new ids or scores.
+- `E19.case.01` hashes to validation. It was run as a fixed anchor, not as held-out confirmation.
+- The contract trace on the dynamic-edge case is the 9-step cache-reading alternative. The 8-step reference also remains a legal trace; the no-cache base trace is tested.
+- The PRD Gold bar for E19 was not attempted. No confirmation cohort was generated.
+- E10, E25, and every archetype other than E19 were not implemented.
+
+### Next
+
+Analysis of this E19 qualification report. E10 and E25 stay unbuilt. Day 8 failure records remain the next PRD implementation milestone and were not started here.
+
+---
+
 ## 2026-10-06 — Episode design freeze
 
 ### Shipped
