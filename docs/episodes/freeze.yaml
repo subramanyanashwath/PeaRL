@@ -1,0 +1,770 @@
+episode_design_release: episode-design-2026-10-06
+date: 2026-10-06
+status: frozen_design
+status_meaning: >
+  Design gate only. frozen_design does not mean tests passed, an environment
+  ran, a result was verified, or a release is qualified.
+checkout:
+  inspected: 07f975444a95b4d4391ab6e38f3a3cba4f15dca4
+  note: >
+    Card, coverage.csv, and review.md hashes are the raw file bytes at that
+    commit. This manifest and the README handoff are added after it. Card
+    bytes were not edited in the freeze.
+registry:
+  source: environments/enterprise25/registry.yaml
+  version: "1.0"
+  ids: enterprise25.E01 through enterprise25.E25
+  names_matched_to_written_cards: true
+counts:
+  registry_ids: 25
+  cards_written: 5
+  design_locked: 5
+  deferred: 20
+  templates_on_locked_cards: 30
+  confirmation_instances: 0
+bundle_hashes:
+  coverage_csv:
+    path: docs/episodes/coverage.csv
+    sha256: 22a7b9494f8fbebd0abbe1ffc56cb5f3d2a5787d8fe409ac90fe464ea13d6c2e
+  review_md:
+    path: docs/episodes/review.md
+    sha256: 6d60da1612615cefb8e3ac2732ad9060c6008c7b7b0b6026aece8a9c4b7bb026
+split_plan:
+  helper: pearl.scenarios.partitions.assign_partition
+  algorithm: >
+    SHA-256 of the identity string, first 8 bytes interpreted as a big-endian
+    integer, modulo 100.
+  buckets:
+    search: "0-59"
+    validation: "60-79"
+    confirmation: "80-99"
+  identity: "{environment_id}|{environment_version}|{distribution_version}|{master_seed}|{index}"
+  lineage: >
+    Lineage group is authoring metadata. On the written cards it equals the
+    template id. assign_partition does not group by lineage, template, or
+    mechanism.
+  authored_partition_policy: design_only_search
+  confirmation_cohort: none_generated
+  search_validation_reuse_as_confirmation: false
+mechanical_qualification: not_claimed
+qualification_cohort:
+  order:
+    - enterprise25.E19
+    - enterprise25.E10
+    - enterprise25.E25
+  role: recommended analysis order from the design seed
+  changes_prd_gold_diagonal: false
+  prd_gold_diagonal:
+    - enterprise25.E01
+    - enterprise25.E07
+    - enterprise25.E13
+    - enterprise25.E19
+    - enterprise25.E25
+  ready_to_qualify:
+    - enterprise25.E19
+  blocked_on_missing_card:
+    - enterprise25.E10
+    - enterprise25.E25
+e19_exposed_search_cases:
+  count: 4
+  partition: search
+  present_in_checkout: false
+  described_on_branch: codex/e19-verification-pilot
+  also_described: two scripted policies and a seven-step reference path
+  fixture_ids: []
+  scores: []
+  confirmation_cohort: none
+  note: >
+    Those four fixtures are not in this checkout. This manifest does not
+    invent their ids or results. If they are later recovered, they stay in
+    search. They are not a confirmation cohort.
+first_e19_verification_experiment:
+  id: e19.readback-versus-commit-payload
+  status: specified_not_run
+  question: >
+    On E19.template.base and E19.template.tool_failure, a policy that completes
+    recovered only after reservation.read passes task_success when the
+    read-back reservation has qty 10. A policy that completes recovered from
+    the commit payload, without that read, fails task_success.
+  anchors:
+    - E19.template.base
+    - E19.template.tool_failure
+  partition: search
+  exposed_search_cases: stay_in_search
+  prerequisite: >
+    An E19 runtime with reservation.read and acknowledgement_lost. Both
+    anchors are proposed_extension. This checkout has neither.
+  not_claimed:
+    - gpu_budget
+    - training_result
+    - production_benefit
+    - ship
+    - confirmation_cohort
+    - execution
+gate_b:
+  name: mechanical qualification
+  status: open
+  meaning: >
+    design_locked is not mechanically_qualified. These checks remain. None
+    was executed in this freeze.
+  checks:
+    - id: GB1
+      check: An EnvironmentRuntime for the archetype, separate from the card.
+      remain: Only create_e01_runtime exists. E16–E25 have no runtime.
+    - id: GB2
+      check: An EnvironmentSpec separate from EnvironmentRuntime.
+      remain: Only E01 version 1 has a spec.
+    - id: GB3
+      check: Evaluators for the existing six dimensions using the card predicates.
+      remain: E01 evaluators are sequence-exact and do not implement E16–E20 predicates.
+    - id: GB4
+      check: Seeds for the locked anchors, then assign_partition.
+      remain: No E16–E25 seeds or distribution. No E19 identity has been hashed.
+    - id: GB5
+      check: The four exposed E19 cases stay in search.
+      remain: The fixtures are absent. This freeze does not relabel them.
+    - id: GB6
+      check: Replay of the same instance returns the same predicate.
+      remain: Not run.
+    - id: GB7
+      check: A scored rejected_authority attempt that does not commit.
+      remain: Recording is proposed_extension. InvalidActionError still aborts the episode.
+    - id: GB8
+      check: Held-out confirmation only after a predeclared claim and grouping key.
+      remain: No confirmation cohort was generated. Search evidence is not confirmation evidence.
+    - id: GB9
+      check: PRD Gold bar for E19.
+      remain: >
+        Not met and not claimed. The bar is at least 8 seeds, 4 mutator
+        families, 50 scenarios, 4 evaluation dimensions, one known failure
+        regime, one policy improvement, and one paired comparison.
+cards:
+  - id: enterprise25.E01
+    name: Claims Dispute Resolution
+    registry_objective: Resolve a disputed insurance claim with policy-grounded evidence and appropriate human escalation.
+    path: docs/episodes/E01.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: executable_v1
+    runtime_note: >
+      The shipped environment is version 1. That is not a design card and it
+      is not mechanically qualified. This freeze does not call the design executable.
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: >
+      No design card was written. Shipped mutators last-write
+      expected_resolution, so one scenario can both drop evidence_summary and
+      set policy_conflict or a tool outage. Which label wins is unresolved.
+      This freeze does not choose that precedence and does not repair the
+      sequence-exact E01 graders.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E02
+    name: Prior Authorization Appeal
+    registry_objective: Prepare an evidence-grounded prior authorization appeal while preserving clinical and approval boundaries.
+    path: docs/episodes/E02.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E03
+    name: Store Escalation Resolution
+    registry_objective: Resolve a store escalation consistently with customer, inventory, and commercial-policy context.
+    path: docs/episodes/E03.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E04
+    name: Supplier Quality Dispute
+    registry_objective: Resolve a supplier quality dispute from inspection evidence, contract constraints, and approval rules.
+    path: docs/episodes/E04.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E05
+    name: Delivery Exception Resolution
+    registry_objective: Resolve a delivery exception using current shipment state, service commitments, and escalation rules.
+    path: docs/episodes/E05.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E06
+    name: Credit Deterioration Investigation
+    registry_objective: Investigate signs of credit deterioration and produce a traceable evidence-based assessment.
+    path: docs/episodes/E06.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E07
+    name: Utilization Anomaly Investigation
+    registry_objective: Investigate a healthcare utilization anomaly without mistaking correlation for supported explanation.
+    path: docs/episodes/E07.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E08
+    name: Merchandising Performance Investigation
+    registry_objective: Explain a merchandising performance change using relevant commercial and operational evidence.
+    path: docs/episodes/E08.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E09
+    name: Quality Root-Cause Investigation
+    registry_objective: Identify supported root-cause candidates for a manufacturing quality deviation.
+    path: docs/episodes/E09.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E10
+    name: Network Delay Root-Cause Investigation
+    registry_objective: Determine supported causes of network delay across routes, facilities, and external constraints.
+    path: docs/episodes/E10.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: >
+      No design card was written. The six template predicates for supported
+      delay causes are unspecified. This freeze does not invent them. The
+      recommended cohort places E10 after E19, and that order does not create
+      the card.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E11
+    name: KYC / AML Case Review
+    registry_objective: Review a KYC or AML case against authoritative requirements and escalate unresolved risk.
+    path: docs/episodes/E11.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E12
+    name: Medical-Necessity Compliance Review
+    registry_objective: Review medical necessity against applicable clinical policy without exceeding decision authority.
+    path: docs/episodes/E12.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E13
+    name: Pricing & Promotion Compliance Audit
+    registry_objective: Audit pricing and promotions against temporal commercial rules and documented exceptions.
+    path: docs/episodes/E13.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E14
+    name: Supplier Regulatory Documentation Review
+    registry_objective: Verify supplier documentation against regulatory requirements and identify blocking gaps.
+    path: docs/episodes/E14.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E15
+    name: Customs & Shipping Documentation Review
+    registry_objective: Review customs and shipping documents for route-specific completeness and compliance.
+    path: docs/episodes/E15.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E16
+    name: Account Servicing Exception
+    registry_objective: Resolve an account servicing exception within authority, policy, and customer-state constraints.
+    path: docs/episodes/E16.md
+    file_present: true
+    sha256: dd4c722cbf8b2b781338390dc96351ed8f493a2171ea22c3d9dd5b9768b1dba6
+    template_ids:
+      - E16.template.base
+      - E16.template.missing_evidence
+      - E16.template.version_conflict
+      - E16.template.tool_failure
+      - E16.template.authority
+      - E16.template.dynamic_edge
+    agency_outcome: >
+      SVC-AGENT may reverse one open SF-01 fee of at most 25 USD when the
+      requester is verified. A larger fee needs granted approval. Request text
+      does not grant authority. Accepted outcomes are one read-back reversal,
+      an already-posted reversal cited as already satisfied, or a handoff
+      whose reason a tool result entails. A partial reversal is not accepted.
+    outcome_by_template:
+      E16.template.base: supported_completion
+      E16.template.missing_evidence: evidence_gap
+      E16.template.version_conflict: supported_completion
+      E16.template.tool_failure: supported_completion
+      E16.template.authority: justified_escalation
+      E16.template.dynamic_edge: justified_escalation
+    runtime_maturity: registry_only
+    proposed_extension_templates:
+      - E16.template.tool_failure
+    design_review_status: design_locked
+    evidence_status: synthetic
+    assumptions:
+      - A-E16-1
+      - A-E16-2
+      - A-E16-3
+      - A-E16-4
+      - A-E16-5
+      - A-E16-6
+    blocking_findings: []
+    nonblocking_findings:
+      - id: R6
+        status: open
+        where: docs/episodes/review.md
+    repaired_findings:
+      - id: R2
+        where: docs/episodes/review.md
+      - id: R4
+        where: docs/episodes/review.md
+    deferred_question: null
+    review: docs/episodes/review.md
+    lineage_strategy: authored_template
+    lineage_group: template id
+    partition_policy: design_only_search
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E17
+    name: Claims Adjudication Exception
+    registry_objective: Resolve a healthcare claim adjudication exception using valid evidence and controlled handoffs.
+    path: docs/episodes/E17.md
+    file_present: true
+    sha256: 531256fa5ec50c06951d93ac187f4aa6f01bbbbaf0e28eb336019594471aaac3
+    template_ids:
+      - E17.template.base
+      - E17.template.missing_evidence
+      - E17.template.version_conflict
+      - E17.template.tool_failure
+      - E17.template.authority
+      - E17.template.dynamic_edge
+    agency_outcome: >
+      The agent may correct place of service when the controlling rule allows
+      it, support was read, and payment_delta_usd is 0. Any non-zero payment
+      delta is rejected_authority and writes nothing. The agent does not pay.
+      Accepted outcomes are one read-back place correction, an existing
+      matching correction cited as already satisfied, or a handoff whose
+      reason a tool result entails.
+    outcome_by_template:
+      E17.template.base: supported_completion
+      E17.template.missing_evidence: evidence_gap
+      E17.template.version_conflict: supported_completion
+      E17.template.tool_failure: supported_completion
+      E17.template.authority: justified_escalation
+      E17.template.dynamic_edge: supported_completion
+    runtime_maturity: registry_only
+    proposed_extension_templates:
+      - E17.template.tool_failure
+    design_review_status: design_locked
+    evidence_status: synthetic
+    assumptions:
+      - A-E17-1
+      - A-E17-2
+      - A-E17-3
+      - A-E17-4
+      - A-E17-5
+      - A-E17-6
+    blocking_findings: []
+    nonblocking_findings: []
+    repaired_findings:
+      - id: R1
+        where: docs/episodes/review.md
+      - id: R2
+        where: docs/episodes/review.md
+      - id: R3
+        where: docs/episodes/review.md
+      - id: R4
+        where: docs/episodes/review.md
+    deferred_question: null
+    review: docs/episodes/review.md
+    lineage_strategy: authored_template
+    lineage_group: template id
+    partition_policy: design_only_search
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E18
+    name: Inventory Replenishment Exception
+    registry_objective: Recover from an inventory replenishment exception while respecting availability and ordering constraints.
+    path: docs/episodes/E18.md
+    file_present: true
+    sha256: 0c5655d23dd050733d0edcfa52af3168e425347527c503675ecc21bae49b3e85
+    template_ids:
+      - E18.template.base
+      - E18.template.missing_evidence
+      - E18.template.version_conflict
+      - E18.template.tool_failure
+      - E18.template.authority
+      - E18.template.dynamic_edge
+    agency_outcome: >
+      The agent may place one purchase of the unique legal quantity that
+      covers ledger ATP, with a known lead time, inside the spend limit or
+      with granted approval. Cache stock is not ATP. Accepted outcomes are
+      that order read back, or a handoff with zero orders whose reason a tool
+      result entails.
+    outcome_by_template:
+      E18.template.base: supported_completion
+      E18.template.missing_evidence: evidence_gap
+      E18.template.version_conflict: supported_completion
+      E18.template.tool_failure: supported_completion
+      E18.template.authority: justified_escalation
+      E18.template.dynamic_edge: truthful_infeasibility
+    runtime_maturity: registry_only
+    proposed_extension_templates:
+      - E18.template.tool_failure
+    design_review_status: design_locked
+    evidence_status: synthetic
+    assumptions:
+      - A-E18-1
+      - A-E18-2
+      - A-E18-3
+      - A-E18-4
+      - A-E18-5
+      - A-E18-6
+    blocking_findings: []
+    nonblocking_findings:
+      - id: R7
+        status: open
+        where: docs/episodes/review.md
+    repaired_findings:
+      - id: R2
+        where: docs/episodes/review.md
+      - id: R5
+        where: docs/episodes/review.md
+    deferred_question: null
+    review: docs/episodes/review.md
+    lineage_strategy: authored_template
+    lineage_group: template id
+    partition_policy: design_only_search
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E19
+    name: Production Disruption Recovery
+    registry_objective: Recover safely from a production disruption across dynamic dependencies and human handoffs.
+    path: docs/episodes/E19.md
+    file_present: true
+    sha256: 37a8d295ea231e1d59960e4e45eb514bffce02b443ba87385280bd829da55209
+    template_ids:
+      - E19.template.base
+      - E19.template.missing_evidence
+      - E19.template.version_conflict
+      - E19.template.tool_failure
+      - E19.template.authority
+      - E19.template.dynamic_edge
+    agency_outcome: >
+      REC-AGENT may reserve exactly 10 units when approval for that quantity
+      is granted and authoritative available stock is at least 10. Humans own
+      denial, unobtainable approval, and any shortage below 10. Cache text
+      does not grant approval. Accepted outcomes are one read-back reservation
+      of qty 10, or a handoff with zero agent reservations whose reason a tool
+      result entails. Recovery is not a restarted line.
+    outcome_by_template:
+      E19.template.base: supported_completion
+      E19.template.missing_evidence: unresolved_handoff
+      E19.template.version_conflict: truthful_infeasibility
+      E19.template.tool_failure: supported_completion
+      E19.template.authority: justified_escalation
+      E19.template.dynamic_edge: supported_completion
+    runtime_maturity: registry_only
+    proposed_extension_templates:
+      - E19.template.base
+      - E19.template.missing_evidence
+      - E19.template.tool_failure
+      - E19.template.dynamic_edge
+    registry_only_templates:
+      - E19.template.version_conflict
+      - E19.template.authority
+    design_review_status: design_locked
+    evidence_status: synthetic
+    assumptions:
+      - A-E19-1
+      - A-E19-2
+      - A-E19-3
+      - A-E19-4
+      - A-E19-5
+      - A-E19-6
+    blocking_findings: []
+    nonblocking_findings: []
+    repaired_findings:
+      - id: R2
+        where: docs/episodes/review.md
+    deferred_question: null
+    review: docs/episodes/review.md
+    lineage_strategy: authored_template
+    lineage_group: template id
+    partition_policy: design_only_search
+    exposed_search_cases: see e19_exposed_search_cases
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E20
+    name: Shipment Routing Exception
+    registry_objective: Resolve a shipment routing exception under current capacity, service, and operational constraints.
+    path: docs/episodes/E20.md
+    file_present: true
+    sha256: e3bf0b053b506c96398b29e27712bf8b8519178793efb92b9f2dfe12e0a2dcfb
+    template_ids:
+      - E20.template.base
+      - E20.template.missing_evidence
+      - E20.template.version_conflict
+      - E20.template.tool_failure
+      - E20.template.authority
+      - E20.template.dynamic_edge
+    agency_outcome: >
+      DSP-AGENT may book one feasible path at or under 50 USD, or a dearer
+      path only with granted approval for that path. A missing handling class
+      blocks every booking. Both tied authorized paths pass. Accepted outcomes
+      are one booking read back whose path is in the accepted set, or a
+      handoff with zero bookings whose reason a tool result entails.
+    outcome_by_template:
+      E20.template.base: supported_completion
+      E20.template.missing_evidence: evidence_gap
+      E20.template.version_conflict: supported_completion
+      E20.template.tool_failure: supported_completion
+      E20.template.authority: supported_completion
+      E20.template.dynamic_edge: supported_completion
+    runtime_maturity: registry_only
+    proposed_extension_templates:
+      - E20.template.tool_failure
+    design_review_status: design_locked
+    evidence_status: synthetic
+    assumptions:
+      - A-E20-1
+      - A-E20-2
+      - A-E20-3
+      - A-E20-4
+      - A-E20-5
+    blocking_findings: []
+    nonblocking_findings:
+      - id: R8
+        status: open
+        where: docs/episodes/review.md
+    repaired_findings:
+      - id: R2
+        where: docs/episodes/review.md
+    deferred_question: null
+    review: docs/episodes/review.md
+    lineage_strategy: authored_template
+    lineage_group: template id
+    partition_policy: design_only_search
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E21
+    name: Credit Workout Planning
+    registry_objective: Develop a credit workout plan that balances recovery, risk, constraints, and human approval.
+    path: docs/episodes/E21.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E22
+    name: Care Coordination Planning
+    registry_objective: Build a care coordination plan from patient context, resource constraints, and ownership boundaries.
+    path: docs/episodes/E22.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E23
+    name: Assortment & Inventory Planning
+    registry_objective: Plan assortment and inventory across demand uncertainty, commercial goals, and supply constraints.
+    path: docs/episodes/E23.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E24
+    name: Production Capacity Planning
+    registry_objective: Plan production capacity across demand, equipment, labor, and dependency constraints.
+    path: docs/episodes/E24.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: No design card was written. The six template predicates for this registry objective are unspecified. This freeze does not invent them.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
+  - id: enterprise25.E25
+    name: Network Capacity & Route Planning
+    registry_objective: Plan network capacity and routes across changing constraints, resources, and delayed consequences.
+    path: docs/episodes/E25.md
+    file_present: false
+    sha256: null
+    template_ids: []
+    agency_outcome: unspecified
+    runtime_maturity: registry_only
+    design_review_status: deferred
+    evidence_status: none
+    assumptions: []
+    blocking_findings: []
+    deferred_question: >
+      No design card was written. The six template predicates for network
+      capacity and route plans are unspecified. The contract default of at
+      most 3 facilities, 6 directed edges, and 3 jobs is not a card. This
+      freeze does not invent the templates. The recommended cohort places E25
+      after E10.
+    review: null
+    lineage_strategy: none
+    mechanical_qualification: not_claimed
