@@ -5,11 +5,11 @@ status_meaning: >
   Design gate only. frozen_design does not mean tests passed, an environment
   ran, a result was verified, or a release is qualified.
 checkout:
-  inspected: 07f975444a95b4d4391ab6e38f3a3cba4f15dca4
+  inspected: d336e3671a6e6f1ca2cab94dd985f91f2bedadac
   note: >
-    Card, coverage.csv, and review.md hashes are the raw file bytes at that
-    commit. This manifest and the README handoff are added after it. Card
-    bytes were not edited in the freeze.
+    Card, coverage.csv, and review.md hashes are the raw file bytes in that
+    tree. This manifest and the README handoff are added after it. Card bytes
+    were not edited in the freeze.
 registry:
   source: environments/enterprise25/registry.yaml
   version: "1.0"

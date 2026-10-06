@@ -9,7 +9,7 @@ Milestone and decision log. New entries go at the top.
 ### Shipped
 
 - Reconciled `enterprise25.E01` through `enterprise25.E25` with `environments/enterprise25/registry.yaml`. Names match. Five card files exist. Twenty do not.
-- Added `docs/episodes/freeze.yaml`, release `episode-design-2026-10-06`, status `frozen_design`. Card SHA-256 values are the raw bytes of `E16.md` through `E20.md` at `07f9754`. Absent cards have a null hash.
+- Added `docs/episodes/freeze.yaml`, release `episode-design-2026-10-06`, status `frozen_design`. Card SHA-256 values are the raw bytes of `E16.md` through `E20.md` in `d336e36`. Absent cards have a null hash.
 - Marked E16–E20 `design_locked` and E01–E15 plus E21–E25 `deferred`. Each deferred entry states that its six templates were not written.
 - Appended the qualification handoff to `docs/episodes/README.md`.
 
