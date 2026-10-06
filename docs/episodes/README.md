@@ -1,6 +1,6 @@
 # Episode design output contract
 
-**Status:** `in_authoring`. E16–E20 cards are `design_locked`. They are not executable. E01–E15 and E21–E25 are not written.
+**Status:** `frozen_design`. Five cards are `design_locked` (E16–E20). Twenty cards are `deferred` because they were not written. Nothing in this bundle is executable or mechanically qualified. The handoff is the last section of this file.
 **Campaign:** `episode-design-2026-10-06`
 **Date:** 2026-10-06
 **Checkout inspected:** `main` at `8b00f0b` (`feat: integrate Gnomon decision layer`)
@@ -308,4 +308,20 @@ No cosmetic choices are left open. Paths, ids, column order, slot slugs, outcome
 
 ## Stop
 
-The output contract above remains in force. E16–E20 are `design_locked` in the cards, `coverage.csv`, and `review.md`. `freeze.yaml` is not written. No runtime change is authorized.
+The output contract above remains in force. The campaign stops at the files listed in `docs/episodes/freeze.yaml`. No runtime change is authorized.
+
+## Handoff
+
+`docs/episodes/freeze.yaml` is release `episode-design-2026-10-06`, status `frozen_design`. That status is the design gate. It is not a test run, a qualification, or a SHIP conclusion.
+
+**Counts.** 5 `design_locked`: E16, E17, E18, E19, E20. Each has one card, six templates, explicit assumptions, and no open blocking finding. Review links are in the manifest. R6, R7, and R8 stay nonblocking. 20 `deferred`: E01–E15 and E21–E25. Their card files were not written, so their template predicates are unspecified. E01's additional open question is which `expected_resolution` wins when mutators both drop `evidence_summary` and set a conflict or outage. This freeze does not choose it.
+
+**Already runnable.** E01 version 1 only: spec, runtime, six evaluators, the `baseline` policy, and seeds `E01.seed.01` through `E01.seed.04`. It is not Gold. E02–E25 have no runtime. The locked cards are `registry_only` or `proposed_extension`. `mechanical_qualification` is `not_claimed` on all 25 ids.
+
+**Cohort.** The recommended qualification order is E19, then E10, then E25. That order does not change the PRD Gold diagonal. Only E19 has a locked card. E10 and E25 stay deferred until a later design exists; this campaign does not write those cards.
+
+**Gate B.** Mechanical qualification remains open. The unmet checks are in `freeze.yaml` under `gate_b`: a runtime and a spec other than E01; evaluators for the card predicates; seeds and `assign_partition` for those seeds; the four exposed E19 cases kept in search; replay; a scored blocked attempt; a confirmation cohort only after a predeclared claim; and the PRD Gold bar for E19. None of those checks was run.
+
+**First E19 experiment.** `e19.readback-versus-commit-payload`, specified and not run. On `E19.template.base` and `E19.template.tool_failure`, completing `recovered` only after `reservation.read` of qty 10 passes `task_success`. Completing `recovered` from the commit payload fails it. Both anchors are `proposed_extension`, so the experiment waits on a runtime. The design seed's four E19 SEARCH fixtures are not in this checkout. This handoff does not invent their ids or scores. If they are recovered, they stay in `search`. No confirmation cohort, GPU budget, training result, or production benefit is claimed.
+
+The next work is qualification and analysis of that first E19 experiment. It is not another design expansion.
