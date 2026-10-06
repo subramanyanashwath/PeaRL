@@ -4,6 +4,55 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — Episode design repair E16–E20
+
+### Shipped
+
+- Repaired blocking findings R1–R5 on `docs/episodes/E16.md` through `docs/episodes/E20.md`.
+- Marked those five cards `design_locked`. None is deferred.
+- Set `review_status` to `design_locked` on the 30 E16–E20 rows in `docs/episodes/coverage.csv`.
+- Recorded the original counterexample, the changed predicate, the new disposition, and the positive recheck in `docs/episodes/review.md`.
+
+### Verification
+
+- Design reconciliation only. Each blocking trace was checked against the edited predicate, and each template's reference and named alternative were checked the same way. No tests, lint, or type check were run. No episodes were executed. No confirmation instances were generated.
+
+### Deviations and concerns
+
+- R6, R7, and R8 stay nonblocking and were not repaired.
+- E17 rejects every non-zero `payment_delta_usd`, including values at or under 100 USD. Assumption `A-E17-5`. No anchor requests a delta in that range.
+- Attempt recording for `rejected_authority` remains `proposed_extension`. The contract now names the failed disposition; this checkout still cannot score the attempt.
+- E16–E20 stay `registry_only` or `proposed_extension`. `design_locked` is a card status, not an executable runtime.
+
+### Next
+
+The next unauthored family remains E06–E10. Day 8 failure records remain the next PRD implementation milestone.
+
+---
+
+## 2026-10-06 — Episode design review E16–E20
+
+### Shipped
+
+- Appended `docs/episodes/review.md` for E16–E20. Five blocking grader defects and three nonblocking probe notes. Cards and `coverage.csv` were not edited.
+
+### Verification
+
+- Design review only. Traces were compared with the written predicates and with the native step ceiling in `FunctionalEnvironmentRuntime`. No tests, lint, or type check were run. No episodes were executed. No confirmation instances were generated.
+
+### Deviations and concerns
+
+- E17 can score a place correction the agent never observed, and its payment probes are not tool arguments.
+- Handoff reasons on E16–E20 can pass without a tool result that entails them.
+- E16 and E17 reference traces cite record ids the declared tool outputs do not define.
+- E18's 300 USD authority probe does not reach `rejected_authority`.
+
+### Next
+
+Repair only those blocking findings when that pass is requested. The next unauthored family remains E06–E10. Day 8 failure records remain the next PRD implementation milestone.
+
+---
+
 ## 2026-10-06 — Episode design cards E16–E20
 
 ### Shipped
