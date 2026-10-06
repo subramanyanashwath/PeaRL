@@ -4,6 +4,38 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — Episode design contract only
+
+### Shipped
+
+- Added `docs/episodes/README.md`, the finite documentation contract for 25
+  archetype cards, six templates per card, `coverage.csv`, `review.md`, and
+  `freeze.yaml`.
+- Recorded the checkout inventory: registry ids E01–E25 on `main` at
+  `8b00f0b`; executable coverage is E01 version 1 only; E19 pilot files named
+  by the design seed are not in this tree.
+
+### Verification
+
+- Inspection of `registry.yaml`, PRD terminology and milestone text, E01 spec,
+  runtime, evaluators, seeds, distribution, and `assign_partition`. No tests,
+  lint, or type check were run. No product code changed.
+
+### Deviations and concerns
+
+- This session does not execute Day 8. The design-seed analysis order
+  E19 → E10 → E25 is recorded as a recommendation and does not change the PRD
+  Gold diagonal or the registry.
+- E01 compound-mutation ground-truth precedence remains unresolved. Shipped
+  E01 graders stay sequence-exact.
+
+### Next
+
+Author the first card family only when that documentation pass is requested.
+The PRD's next implementation milestone remains Day 8 failure records.
+
+---
+
 ## 2026-09-11 — Day 7: Gnomon integrated decision layer
 
 ### Shipped
