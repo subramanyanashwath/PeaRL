@@ -4,6 +4,29 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — Episode design review E16–E20
+
+### Shipped
+
+- Appended `docs/episodes/review.md` for E16–E20. Five blocking grader defects and three nonblocking probe notes. Cards and `coverage.csv` were not edited.
+
+### Verification
+
+- Design review only. Traces were compared with the written predicates and with the native step ceiling in `FunctionalEnvironmentRuntime`. No tests, lint, or type check were run. No episodes were executed. No confirmation instances were generated.
+
+### Deviations and concerns
+
+- E17 can score a place correction the agent never observed, and its payment probes are not tool arguments.
+- Handoff reasons on E16–E20 can pass without a tool result that entails them.
+- E16 and E17 reference traces cite record ids the declared tool outputs do not define.
+- E18's 300 USD authority probe does not reach `rejected_authority`.
+
+### Next
+
+Repair only those blocking findings when that pass is requested. The next unauthored family remains E06–E10. Day 8 failure records remain the next PRD implementation milestone.
+
+---
+
 ## 2026-10-06 — Episode design cards E16–E20
 
 ### Shipped
