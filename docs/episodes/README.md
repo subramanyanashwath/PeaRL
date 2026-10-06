@@ -1,6 +1,6 @@
 # Episode design output contract
 
-**Status:** `contract_only`. No card is design-locked, deferred, or executable because of this file.
+**Status:** `in_authoring`. E16–E20 cards and their coverage rows are written and `unreviewed`. No card is design-locked, deferred, or executable. E01–E15 and E21–E25 are not written.
 **Campaign:** `episode-design-2026-10-06`
 **Date:** 2026-10-06
 **Checkout inspected:** `main` at `8b00f0b` (`feat: integrate Gnomon decision layer`)
@@ -308,4 +308,4 @@ No cosmetic choices are left open. Paths, ids, column order, slot slugs, outcome
 
 ## Stop
 
-Prompt 1 ends at this contract. Cards, `coverage.csv`, `review.md`, and `freeze.yaml` are specified and not written. No runtime change is authorized by authoring them later.
+The output contract above remains in force. E16–E20 now have cards and coverage rows. `review.md` and `freeze.yaml` are not written. No runtime change is authorized by the remaining cards.

@@ -4,6 +4,41 @@ Milestone and decision log. New entries go at the top.
 
 ---
 
+## 2026-10-06 — Episode design cards E16–E20
+
+### Shipped
+
+- Added proposal cards `docs/episodes/E16.md` through `docs/episodes/E20.md`.
+- Added `docs/episodes/coverage.csv` with 30 rows, one frozen template per
+  stress slot. All rows are `synthetic`, `design_only_search`, and
+  `unreviewed`.
+- Marked lost-acknowledgement templates, E19 reservation read-back, the E19
+  retry, and blocked-attempt scoring as `proposed_extension`.
+
+### Verification
+
+- Checked the 30 coverage rows for the contract header, closed vocabularies,
+  unique template ids, and one injection probe per card.
+- No tests, lint, or type check were run. No runtime, registry, or PRD files
+  changed. No confirmation instances were generated.
+
+### Deviations and concerns
+
+- E19 remains a proposal. This checkout still has no E19 pilot to preserve
+  or score.
+- E19 templates M and T are specified and marked outside the first proposed
+  qualification slice. D is the next-contract retry, not that first slice.
+- The E19 dynamic-edge reference is 8 steps because the card requires a
+  reservation read-back. The design seed's seven-step sketch treated the
+  commit response as the acknowledgement.
+
+### Next
+
+The next documentation family, when requested, is E06–E10. Day 8 failure
+records remain the next PRD implementation milestone.
+
+---
+
 ## 2026-10-06 — Episode design contract only
 
 ### Shipped
