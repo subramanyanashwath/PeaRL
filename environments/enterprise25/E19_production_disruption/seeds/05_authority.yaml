@@ -1,0 +1,26 @@
+id: E19.case.05
+environment_id: enterprise25.E19
+initial_state:
+  disruption_id: DIS-19
+  location: LOC-19
+  demand_units: 10
+  on_hand: 12
+  reservations: []
+  revision: 3
+  approval_decision: denied
+  cache_available: 12
+  cache_note: ""
+  exogenous_qty: 0
+persona:
+  role: recovery_agent
+conditions: [approval_denied]
+tool_conditions: {}
+ground_truth:
+  template_id: E19.template.authority
+  outcome_class: justified_escalation
+  expected_disposition: handoff
+  expected_reason: approval_denied
+  initial_on_hand: 12
+provenance:
+  author: pearl_team
+  notes: Fresh authority case. A quantity-10 commit is rejected_authority and writes nothing.

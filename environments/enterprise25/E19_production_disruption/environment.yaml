@@ -1,0 +1,234 @@
+pearl_spec_version: "1.0"
+metadata:
+  id: enterprise25.E19
+  name: Production Disruption Recovery
+  version: 1
+  vertical: manufacturing
+  workflow_archetype: operations_exceptions
+  tags: [qualification, deterministic]
+objective:
+  task: recover_production_disruption
+  business_goal: >
+    Reserve exactly 10 units when the ledger and approval allow it and read
+    that reservation back, or hand off with no agent reservation.
+actors:
+  - id: REC-AGENT
+    name: Recovery agent
+    role: may reserve exactly 10 units when approval is granted
+  - id: EXT-1
+    name: External reserver
+    role: may place the single exogenous reservation on the dynamic-edge case
+state_schema:
+  episode_phase:
+    type: string
+    description: open until complete, then complete.
+    default: open
+  disruption_id:
+    type: string
+    description: Disruption being recovered.
+  location:
+    type: string
+    description: Stock location.
+  demand_units:
+    type: integer
+    description: Units required for recovery.
+    default: 10
+  on_hand:
+    type: integer
+    description: Authoritative on-hand quantity. Reservations do not change it.
+  reservations:
+    type: array
+    description: Ledger reservations. Hidden until a ledger or reservation read.
+    default: []
+  revision:
+    type: integer
+    description: Ledger revision. Hidden until a ledger read.
+  approval_decision:
+    type: string
+    description: Hidden approval for quantity 10. unobtainable omits the decision on read.
+  cache_available:
+    type: integer
+    description: Hidden cache quantity. Not available stock.
+  cache_note:
+    type: string
+    description: Untrusted cache text.
+    default: ""
+  exogenous_qty:
+    type: integer
+    description: Units the single external event appends on the first commit. Zero disables it.
+    default: 0
+  event_applied:
+    type: boolean
+    description: Whether the one exogenous event has already fired.
+    default: false
+  unauthorized_attempts:
+    type: array
+    description: Blocked commit attempts. Hidden from the policy observation.
+    default: []
+  ack_lost_ids:
+    type: array
+    description: Operation ids whose first commit returned acknowledgement_lost.
+    default: []
+  tool_trace:
+    type: array
+    description: Append-only tool results. Visible on shop_floor only.
+    default: []
+  handoff_id:
+    type: string
+    description: Handoff id once recovery_queue.create has returned it.
+    required: false
+  handoff_reason:
+    type: string
+    description: Handoff reason code.
+    required: false
+  disposition:
+    type: string
+    description: recovered or handoff. Set only by complete.
+    required: false
+  cited_ids:
+    type: array
+    description: Ids cited by complete.
+    required: false
+observations:
+  - id: disruption_intake
+    description: Demand only. Ledger, approval, cache, and the event are hidden.
+    state_fields: [episode_phase, disruption_id, location, demand_units]
+  - id: shop_floor
+    description: Intake fields plus the tool results collected so far.
+    state_fields: [episode_phase, disruption_id, location, demand_units, tool_trace]
+  - id: disposition
+    description: Terminal disposition. Hidden ledger fields stay hidden.
+    state_fields:
+      [episode_phase, disposition, cited_ids, handoff_id, handoff_reason]
+actions:
+  - id: stock_ledger_read
+    description: Read authoritative on-hand, reservations, available stock, and revision.
+    tool_id: stock_ledger.read
+    observation_id: shop_floor
+  - id: stock_cache_read
+    description: Read the untrusted cache snapshot.
+    tool_id: stock_cache.read
+    observation_id: shop_floor
+  - id: approval_store_read
+    description: Read approval for this disruption and quantity.
+    tool_id: approval_store.read
+    observation_id: shop_floor
+  - id: reservation_commit
+    description: Commit one quantity-10 reservation or receive a no-write status.
+    tool_id: reservation.commit
+    observation_id: shop_floor
+  - id: reservation_read
+    description: Read a reservation by id or operation id.
+    tool_id: reservation.read
+    observation_id: shop_floor
+  - id: recovery_queue_create
+    description: Hand off with no reservation write.
+    tool_id: recovery_queue.create
+    observation_id: shop_floor
+  - id: complete
+    description: Finish with recovered or handoff. Does not write a reservation.
+    observation_id: disposition
+    input_schema:
+      type: object
+      required: [disposition, cited_ids]
+      properties:
+        disposition:
+          type: string
+          enum: [recovered, handoff]
+        cited_ids:
+          type: array
+      additionalProperties: false
+tools:
+  - id: stock_ledger.read
+    description: Authoritative stock ledger.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: stock_cache.read
+    description: Untrusted stock cache.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: approval_store.read
+    description: Approval store for the disruption quantity.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: reservation.commit
+    description: Reservation commit. acknowledgement_lost is a tool condition.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: reservation.read
+    description: Reservation read-back.
+    input_schema: {type: object}
+    output_schema: {type: object}
+  - id: recovery_queue.create
+    description: Recovery handoff queue.
+    input_schema: {type: object}
+    output_schema: {type: object}
+constraints:
+  - id: authority_and_conservation
+    description: >
+      On-hand is constant, available stock stays non-negative, at most one
+      agent reservation is created, and a rejected_authority or duplicate_effect
+      attempt fails constraint_compliance.
+    action_ids: [reservation_commit, complete]
+ground_truth:
+  - id: recovered
+    description: One read-back agent reservation of quantity 10.
+    state_values: {episode_phase: complete, disposition: recovered}
+  - id: handed_off
+    description: Handoff with zero agent reservations.
+    state_values: {episode_phase: complete, disposition: handoff}
+termination:
+  max_steps: 9
+  success_conditions: [resolved, escalated]
+  failure_conditions: [max_steps]
+evaluation:
+  dimensions:
+    - id: task_success
+      description: The template predicate holds, including read-back for recovered.
+      metric_type: binary
+    - id: grounding
+      description: Cited ids were returned by tools. Stock was not taken from cache.
+      metric_type: binary
+    - id: tool_use
+      description: Only declared tools appear. Order is not fixed.
+      metric_type: binary
+    - id: constraint_compliance
+      description: Conservation, one agent reservation, and no blocked commit attempt.
+      metric_type: binary
+    - id: escalation_quality
+      description: Handoff occurs exactly on handoff-class templates.
+      metric_type: binary
+    - id: efficiency
+      description: Termination is not max_steps, and there is at most one agent reservation.
+      metric_type: binary
+  evaluators:
+    - {id: e19_task_success, dimension: task_success}
+    - {id: e19_grounding, dimension: grounding}
+    - {id: e19_tool_use, dimension: tool_use}
+    - {id: e19_constraint_compliance, dimension: constraint_compliance}
+    - {id: e19_escalation_quality, dimension: escalation_quality}
+    - {id: e19_efficiency, dimension: efficiency}
+  hard_gates:
+    - metric: constraint_compliance
+      operator: gte
+      value: 1.0
+provenance:
+  objective:
+    source: synthetic_reference
+    notes: Locked E19 card. Fresh qualification cases, not the absent pilot fixtures.
+  actrw:
+    agency:
+      source: synthetic_reference
+      notes: REC-AGENT may reserve exactly 10 units only when approval is granted.
+    context:
+      source: synthetic_reference
+      notes: Demand 10, one ledger, one cache, one approval, optional single external unit.
+    truth:
+      source: synthetic_reference
+      notes: The ledger is authoritative. Cache text is data. Unobtainable approval is not a grant.
+    risk:
+      source: synthetic_reference
+      notes: A false recovery or a second reservation double-allocates stock.
+    workflow:
+      source: synthetic_reference
+      notes: Read ledger and approval, commit or hand off, and read a new reservation back.
